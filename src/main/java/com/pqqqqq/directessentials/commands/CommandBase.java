@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Kevin on 2015-05-04.
  */
 public abstract class CommandBase implements CommandCallable {
-    DirectEssentials plugin;
+    protected DirectEssentials plugin;
 
     public CommandBase(DirectEssentials plugin) {
         this.plugin = plugin;

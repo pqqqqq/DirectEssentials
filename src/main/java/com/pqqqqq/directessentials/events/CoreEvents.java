@@ -1,7 +1,6 @@
 package com.pqqqqq.directessentials.events;
 
 import com.pqqqqq.directessentials.DirectEssentials;
-import com.pqqqqq.directessentials.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.entity.player.PlayerJoinEvent;
@@ -18,11 +17,7 @@ public class CoreEvents {
 
     @Subscribe
     public void join(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        String uuid = player.getUniqueId().toString();
-
-        if (!plugin.getUserManager().contains(uuid)) {
-            plugin.getUserManager().add(uuid, new EssentialsUser(uuid));
-        }
+        Player player = event.getEntity();
+        plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
     }
 }
