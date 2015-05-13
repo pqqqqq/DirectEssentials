@@ -108,7 +108,7 @@ public class DirectEssentials {
         dcfg.load();
 
         // Start async saver task
-        game.getAsyncScheduler().runRepeatingTask(this, new EssentialsGame.SaveTask(), TimeUnit.MINUTES, 10L);
+        game.getAsyncScheduler().runRepeatingTaskAfter(this, new EssentialsGame.SaveTask(), TimeUnit.SECONDS, Config.saverTaskSeconds, Config.saverTaskSeconds);
     }
 
     @Subscribe

@@ -18,8 +18,13 @@ public class Config {
     private File file;
     private ConfigurationLoader<CommentedConfigurationNode> cfg;
 
+    // Users
     public static int homesLimit;
 
+    // General
+    public static int saverTaskSeconds;
+
+    // Commands
     public static WeakEssentialsMap<String, EventCommand> commands = new WeakEssentialsMap<String, EventCommand>();
 
     public Config(DirectEssentials plugin, File file, ConfigurationLoader<CommentedConfigurationNode> cfg) {
@@ -43,6 +48,9 @@ public class Config {
 
             CommentedConfigurationNode users = root.getNode("users");
             homesLimit = users.getNode("homes", "limit").getInt(3);
+
+            CommentedConfigurationNode general = root.getNode("general");
+            saverTaskSeconds = general.getNode("saver-task-seconds").getInt(300);
 
             commands.clear();
             CommentedConfigurationNode commandNode = root.getNode("commands");
