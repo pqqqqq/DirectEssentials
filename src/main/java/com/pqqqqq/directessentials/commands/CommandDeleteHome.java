@@ -2,6 +2,8 @@ package com.pqqqqq.directessentials.commands;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
+import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
@@ -12,12 +14,12 @@ import org.spongepowered.api.util.command.CommandSource;
 /**
  * Created by Kevin on 2015-05-12.
  */
-public class CommandDeleteWarp extends CommandBase {
-    public static final Optional<Text> desc = Optional.<Text> of(Texts.of(TextColors.AQUA, "Deletes a warp to a place."));
-    public static final Optional<Text> help = Optional.<Text> of(Texts.of(TextColors.AQUA, "Deletes a warp to a place."));
-    public static final Text usage = Texts.of(TextColors.AQUA, "/deletewarp <warp>");
+public class CommandDeleteHome extends CommandBase {
+    public static final Optional<Text> desc = Optional.<Text>of(Texts.of(TextColors.AQUA, "Deletes a home to a place."));
+    public static final Optional<Text> help = Optional.<Text>of(Texts.of(TextColors.AQUA, "Deletes a home to a place."));
+    public static final Text usage = Texts.of(TextColors.AQUA, "/deletehome <name>");
 
-    public CommandDeleteWarp(DirectEssentials plugin) {
+    public CommandDeleteHome(DirectEssentials plugin) {
         super(plugin);
     }
 
@@ -27,6 +29,13 @@ public class CommandDeleteWarp extends CommandBase {
             return Optional.of(CommandResult.success());
         }
 
+        if (!(source instanceof Player)) {
+            source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
+            return Optional.of(CommandResult.success());
+        }
+
+        Player player = (Player) source;
+        EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
         String[] args = arguments.trim().split(" ");
 
         if (arguments.trim().isEmpty()) {
@@ -34,17 +43,17 @@ public class CommandDeleteWarp extends CommandBase {
             return Optional.of(CommandResult.success());
         }
 
-        if (plugin.getEssentialsGame().getWarps().remove(args[0]) == null) {
-            source.sendMessage(Texts.of(TextColors.RED, "There is no warp with this name."));
+        if (user.getHomes().remove(args[0]) == null) {
+            source.sendMessage(Texts.of(TextColors.RED, "There is no home with this name."));
             return Optional.of(CommandResult.success());
         }
 
-        source.sendMessage(Texts.of(TextColors.GREEN, "Warp deleted successfully."));
+        source.sendMessage(Texts.of(TextColors.GREEN, "Home deleted successfully."));
         return Optional.of(CommandResult.success());
     }
 
     public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.deletewarp") || source.hasPermission("directessentials.*");
+        return source.hasPermission("directessentials.home") || source.hasPermission("directessentials.*");
     }
 
     public Optional<Text> getShortDescription(CommandSource source) {

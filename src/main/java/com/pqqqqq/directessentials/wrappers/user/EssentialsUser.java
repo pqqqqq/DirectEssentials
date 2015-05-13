@@ -2,12 +2,15 @@ package com.pqqqqq.directessentials.wrappers.user;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.data.Home;
+import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.world.Location;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -19,7 +22,19 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     private Optional<Player> cachedPlayer = Optional.<Player> absent();
     private String lastCachedUsername;
 
-    private Optional<Location> home = Optional.<Location> absent();
+    private final WeakEssentialsMap<String, Home> homes = new WeakEssentialsMap<String, Home>();
+
+    public static Map<String, EssentialsUser> loadUsers(ConfigurationNode node) {
+        Map<String, EssentialsUser> users = new HashMap<String, EssentialsUser>();
+        for (ConfigurationNode user : node.getChildrenMap().values()) {
+            EssentialsUser userObj = new EssentialsUser(user.getKey().toString());
+            userObj.getHomes().putAll(Home.loadHomes(user, userObj)); // Load homes
+
+            users.put(user.getKey().toString(), userObj);
+        }
+
+        return users;
+    }
 
     public EssentialsUser() {
     }
@@ -65,19 +80,12 @@ public class EssentialsUser implements IWeakValue, ISaveable {
         this.lastCachedUsername = lastCachedUsername;
     }
 
-    public Optional<Location> getHome() {
-        return home;
+    public WeakEssentialsMap<String, Home> getHomes() {
+        return homes;
     }
 
-    public void setHome(Optional<Location> home) {
-        this.home = home;
-    }
-
-    public void goHome() {
-        Optional<Player> player = getPlayer();
-        if (player.isPresent()) {
-            player.get().setLocation(home.get());
-        }
+    public Home getOrCreateHome(String name) {
+        return this.homes.getOrCreate(name, new Home(), name, this.uuid);
     }
 
     public void init(Object... args) {
@@ -85,6 +93,11 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     }
 
     public void save(ConfigurationNode node) {
+        ConfigurationNode user = node.getNode(this.uuid);
 
+        // Save homes
+        for (Home home : homes) {
+            home.save(user);
+        }
     }
 }

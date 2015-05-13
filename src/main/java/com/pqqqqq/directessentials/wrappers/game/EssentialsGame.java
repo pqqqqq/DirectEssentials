@@ -56,6 +56,7 @@ public class EssentialsGame implements ISaveable {
 
         // User loading
         users.clear();
+        users.putAll(EssentialsUser.loadUsers(node));
 
         // Warp loading
         warps.clear();

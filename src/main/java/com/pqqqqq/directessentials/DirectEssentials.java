@@ -1,9 +1,7 @@
 package com.pqqqqq.directessentials;
 
 import com.google.inject.Inject;
-import com.pqqqqq.directessentials.commands.CommandDeleteWarp;
-import com.pqqqqq.directessentials.commands.CommandSetWarp;
-import com.pqqqqq.directessentials.commands.CommandWarp;
+import com.pqqqqq.directessentials.commands.*;
 import com.pqqqqq.directessentials.commands.essentials.CommandSave;
 import com.pqqqqq.directessentials.config.DataConfig;
 import com.pqqqqq.directessentials.events.CoreEvents;
@@ -56,9 +54,16 @@ public class DirectEssentials {
 
         // Register commands
         CommandService commandService = game.getCommandDispatcher();
+
+        // Warp commands
         commandService.register(this, new CommandWarp(this), "warp");
         commandService.register(this, new CommandSetWarp(this), "setwarp", "swarp");
-        commandService.register(this, new CommandDeleteWarp(this), "deletewarp", "dwarp", "removewarp");
+        commandService.register(this, new CommandDeleteWarp(this), "deletewarp", "dwarp", "removewarp", "delwarp");
+
+        // Home commands
+        commandService.register(this, new CommandHome(this), "home");
+        commandService.register(this, new CommandSetHome(this), "sethome", "shome");
+        commandService.register(this, new CommandDeleteHome(this), "deletehome", "dhome", "removehome", "delhome");
 
         // Essentials main plugin commands
         SimpleDispatcher essentialsCommand = new SimpleDispatcher();

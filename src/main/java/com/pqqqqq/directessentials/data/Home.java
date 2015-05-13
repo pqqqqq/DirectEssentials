@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
+import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.world.Location;
@@ -16,41 +17,46 @@ import java.util.Map;
 /**
  * Created by Kevin on 2015-05-12.
  */
-public class Warp implements IWeakValue, ISaveable {
+public class Home implements IWeakValue, ISaveable {
     private String name;
+    private String owner;
     private Location location = null;
 
-    public static Map<String, Warp> loadWarps(ConfigurationNode node) {
-        Map<String, Warp> warps = new HashMap<String, Warp>();
+    public static Map<String, Home> loadHomes(ConfigurationNode node, EssentialsUser user) {
+        Map<String, Home> homes = new HashMap<String, Home>();
 
-        ConfigurationNode warpsNode = node.getNode("warps");
-        for (ConfigurationNode warp : warpsNode.getChildrenMap().values()) {
-            Warp warpObj = new Warp(warp.getKey().toString());
+        ConfigurationNode homesNode = node.getNode("homes");
+        for (ConfigurationNode home : homesNode.getChildrenMap().values()) {
+            Home homeObj = new Home(home.getKey().toString(), user.getUuid());
 
-            String world = warp.getNode("world").getString();
-            double x = warp.getNode("x").getDouble();
-            double y = warp.getNode("y").getDouble();
-            double z = warp.getNode("z").getDouble();
+            String world = home.getNode("world").getString();
+            double x = home.getNode("x").getDouble();
+            double y = home.getNode("y").getDouble();
+            double z = home.getNode("z").getDouble();
 
             Optional<World> worldObj = DirectEssentials.plugin.getGame().getServer().getWorld(world);
             if (worldObj.isPresent()) {
-                warpObj.setLocation(new Location(worldObj.get(), new Vector3d(x, y, z)));
-                warps.put(warp.getKey().toString(), warpObj);
+                homeObj.setLocation(new Location(worldObj.get(), new Vector3d(x, y, z)));
+                homes.put(home.getKey().toString(), homeObj);
             }
         }
 
-        return warps;
+        return homes;
     }
 
-    public Warp() {
+    public Home() {
     }
 
-    public Warp(String name) {
-        this.init(name);
+    public Home(String name, String owner) {
+        this.init(name, owner);
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     public Location getLocation() {
@@ -72,12 +78,13 @@ public class Warp implements IWeakValue, ISaveable {
 
     public void init(Object... args) {
         this.name = (String) args[0];
+        this.owner = (String) args[1];
     }
 
     public void save(ConfigurationNode node) {
         // TODO: Commenting??
         if (location != null) {
-            ConfigurationNode warps = node.getNode("warps");
+            ConfigurationNode warps = node.getNode("homes");
             ConfigurationNode thisWarp = warps.getNode(name);
 
             thisWarp.getNode("world").setValue(((World) location.getExtent()).getName());

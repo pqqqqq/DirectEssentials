@@ -57,6 +57,7 @@ public class WeakEssentialsMap<T, U extends IWeakValue> implements Iterable<U>, 
 
         // Create
         ((IWeakValue) empty).init(values);
+        items.put(key, empty);
         return empty;
     }
 
