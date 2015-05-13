@@ -10,6 +10,8 @@ import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import com.pqqqqq.directessentials.wrappers.world.EssentialsWorld;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.Game;
+import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -115,6 +117,14 @@ public class EssentialsGame implements ISaveable {
             spawn.getNode("x").setValue(this.spawn.getX());
             spawn.getNode("y").setValue(this.spawn.getY());
             spawn.getNode("z").setValue(this.spawn.getZ());
+        }
+    }
+
+    public static class SaveTask implements Runnable {
+
+        public void run() {
+            DirectEssentials.plugin.getDataConfig().save();
+            DirectEssentials.plugin.getGame().getServer().broadcastMessage(Texts.of(TextColors.AQUA, "DirectEssentials data saved."));
         }
     }
 }

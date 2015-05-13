@@ -23,6 +23,7 @@ import org.spongepowered.api.service.event.EventManager;
 import org.spongepowered.api.util.command.dispatcher.SimpleDispatcher;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Kevin on 2015-05-11.
@@ -102,9 +103,12 @@ public class DirectEssentials {
         cfg.load();
 
         // Data config
-        dcfg = new DataConfig(this, new File("config/directessentials/data.json"));
+        dcfg = new DataConfig(this, new File(configFile.getParentFile() + "/data.json"));
         dcfg.init();
         dcfg.load();
+
+        // Start async saver task
+        game.getAsyncScheduler().runRepeatingTask(this, new EssentialsGame.SaveTask(), TimeUnit.MINUTES, 10L);
     }
 
     @Subscribe

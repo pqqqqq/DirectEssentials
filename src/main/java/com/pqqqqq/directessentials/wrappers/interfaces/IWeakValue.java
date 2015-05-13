@@ -5,5 +5,5 @@ package com.pqqqqq.directessentials.wrappers.interfaces;
  */
 public interface IWeakValue {
 
-    public void init(Object... args);
+    void init(Object... args);
 }
