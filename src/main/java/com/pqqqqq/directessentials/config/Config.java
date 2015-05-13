@@ -1,12 +1,14 @@
 package com.pqqqqq.directessentials.config;
 
+import com.google.common.base.Function;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.commands.config.EventCommand;
+import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
+import javax.annotation.Nullable;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Kevin on 2015-05-12.
@@ -18,7 +20,7 @@ public class Config {
 
     public static int homesLimit;
 
-    public static Map<String, String> shortcuts = new HashMap<String, String>();
+    public static WeakEssentialsMap<String, EventCommand> commands = new WeakEssentialsMap<String, EventCommand>();
 
     public Config(DirectEssentials plugin, File file, ConfigurationLoader<CommentedConfigurationNode> cfg) {
         this.plugin = plugin;
@@ -42,10 +44,20 @@ public class Config {
             CommentedConfigurationNode users = root.getNode("users");
             homesLimit = users.getNode("homes", "limit").getInt(3);
 
-            shortcuts.clear();
-            CommentedConfigurationNode shortcutsNode = root.getNode("shortcuts");
-            for (CommentedConfigurationNode shortcut : shortcutsNode.getChildrenMap().values()) {
-                shortcuts.put(shortcut.getKey().toString().trim(), shortcut.getString().trim());
+            commands.clear();
+            CommentedConfigurationNode commandNode = root.getNode("commands");
+            for (CommentedConfigurationNode command : commandNode.getChildrenMap().values()) {
+                EventCommand eventCommand = new EventCommand(command.getKey().toString());
+                eventCommand.setTimerSeconds(command.getNode("delay-seconds").getInt(-1));
+                eventCommand.setShortcuts(command.getNode("shortcuts").getList(new Function<Object, String>() {
+
+                    @Nullable
+                    public String apply(Object input) {
+                        return input == null ? null : input.toString();
+                    }
+                }));
+
+                commands.put(command.getKey().toString(), eventCommand);
             }
 
             cfg.save(root);

@@ -2,6 +2,7 @@ package com.pqqqqq.directessentials.wrappers.user;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.commands.config.EventCommand;
 import com.pqqqqq.directessentials.data.Home;
 import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
@@ -23,6 +24,8 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     private String lastCachedUsername;
 
     private final WeakEssentialsMap<String, Home> homes = new WeakEssentialsMap<String, Home>();
+
+    private final Map<EventCommand, Boolean> commandDelay = new HashMap<EventCommand, Boolean>();
 
     public static Map<String, EssentialsUser> loadUsers(ConfigurationNode node) {
         Map<String, EssentialsUser> users = new HashMap<String, EssentialsUser>();
@@ -86,6 +89,10 @@ public class EssentialsUser implements IWeakValue, ISaveable {
 
     public Home getOrCreateHome(String name) {
         return this.homes.getOrCreate(name, new Home(), name, this.uuid);
+    }
+
+    public Map<EventCommand, Boolean> getCommandDelay() {
+        return commandDelay;
     }
 
     public void init(Object... args) {
