@@ -2,10 +2,14 @@ package com.pqqqqq.directessentials;
 
 import com.google.inject.Inject;
 import com.pqqqqq.directessentials.commands.*;
+import com.pqqqqq.directessentials.commands.essentials.CommandReload;
 import com.pqqqqq.directessentials.commands.essentials.CommandSave;
+import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.config.DataConfig;
 import com.pqqqqq.directessentials.events.CoreEvents;
 import com.pqqqqq.directessentials.wrappers.game.EssentialsGame;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
@@ -14,6 +18,7 @@ import org.spongepowered.api.event.state.ServerStartedEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
+import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.service.event.EventManager;
 import org.spongepowered.api.util.command.dispatcher.SimpleDispatcher;
 
@@ -32,11 +37,20 @@ public class DirectEssentials {
 
     private EssentialsGame essentialsGame;
     private DataConfig dcfg;
+    private Config cfg;
 
     public static DirectEssentials plugin;
 
     @Inject
     private Logger logger;
+
+    @Inject
+    @DefaultConfig(sharedRoot = false)
+    private File configFile;
+
+    @Inject
+    @DefaultConfig(sharedRoot = false)
+    private ConfigurationLoader<CommentedConfigurationNode> configLoader;
 
     @Inject
     public DirectEssentials(Logger logger) {
@@ -68,6 +82,7 @@ public class DirectEssentials {
         // Essentials main plugin commands
         SimpleDispatcher essentialsCommand = new SimpleDispatcher();
         essentialsCommand.register(new CommandSave(this), "save");
+        essentialsCommand.register(new CommandReload(this), "reload");
 
         commandService.register(this, essentialsCommand, "essentials", "ess", "de", "directessentials", "dessentials", "dess");
 
@@ -77,7 +92,12 @@ public class DirectEssentials {
 
     @Subscribe
     public void started(ServerStartedEvent event) {
-        // Config
+        // Main config
+        cfg = new Config(this, configFile, configLoader);
+        cfg.init();
+        cfg.load();
+
+        // Data config
         dcfg = new DataConfig(this, new File("config/DirectEssentials/data.json"));
         dcfg.init();
         dcfg.load();
@@ -94,6 +114,10 @@ public class DirectEssentials {
 
     public Game getGame() {
         return game;
+    }
+
+    public Config getConfig() {
+        return cfg;
     }
 
     public DataConfig getDataConfig() {
