@@ -14,6 +14,8 @@ public class Config {
     private File file;
     private ConfigurationLoader<CommentedConfigurationNode> cfg;
 
+    public static int homesLimit;
+
     public Config(DirectEssentials plugin, File file, ConfigurationLoader<CommentedConfigurationNode> cfg) {
         this.plugin = plugin;
         this.file = file;
@@ -33,6 +35,8 @@ public class Config {
         try {
             CommentedConfigurationNode root = cfg.load();
 
+            CommentedConfigurationNode users = root.getNode("users");
+            homesLimit = users.getNode("homes", "limit").getInt(3);
 
             cfg.save(root);
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.pqqqqq.directessentials.commands;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.data.Home;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
@@ -41,6 +42,11 @@ public class CommandSetHome extends CommandBase {
 
         if (arguments.trim().isEmpty()) {
             source.sendMessage(getUsage(player));
+            return Optional.of(CommandResult.success());
+        }
+
+        if (user.getHomes().size() >= Config.homesLimit) {
+            source.sendMessage(Texts.of(TextColors.RED, "You cannot have more than ", TextColors.WHITE, Config.homesLimit, TextColors.RED, " home(s)."));
             return Optional.of(CommandResult.success());
         }
 
