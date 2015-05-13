@@ -98,7 +98,7 @@ public class DirectEssentials {
         cfg.load();
 
         // Data config
-        dcfg = new DataConfig(this, new File("config/DirectEssentials/data.json"));
+        dcfg = new DataConfig(this, new File("config/directessentials/data.json"));
         dcfg.init();
         dcfg.load();
     }
