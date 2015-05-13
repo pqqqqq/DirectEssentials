@@ -79,6 +79,10 @@ public class DirectEssentials {
         commandService.register(this, new CommandSetHome(this), "sethome", "shome");
         commandService.register(this, new CommandDeleteHome(this), "deletehome", "dhome", "removehome", "delhome");
 
+        // Spawn commands
+        commandService.register(this, new CommandSpawn(this), "spawn");
+        commandService.register(this, new CommandSetSpawn(this), "setspawn");
+
         // Essentials main plugin commands
         SimpleDispatcher essentialsCommand = new SimpleDispatcher();
         essentialsCommand.register(new CommandSave(this), "save");

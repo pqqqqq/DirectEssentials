@@ -29,12 +29,19 @@ public class CoreEvents {
         this.plugin = plugin;
     }
 
+    // Set to spawn, create EssentialsUser instance
     @Subscribe
     public void join(PlayerJoinEvent event) {
         Player player = event.getEntity();
         plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
+
+        // Teleport to spawn if it exists
+        if (plugin.getEssentialsGame().getSpawn() != null) {
+            player.setLocation(plugin.getEssentialsGame().getSpawn());
+        }
     }
 
+    // Shortcuts and timers, EventCommands
     @Subscribe(order = Order.FIRST)
     public void command(CommandEvent event) {
         CommandSource source = event.getSource();
@@ -104,4 +111,17 @@ public class CoreEvents {
             }
         }
     }
+
+    // Teleport back to spawn on death
+    /* TODO: Readd this when implemented by Sponge
+
+    @Subscribe
+    public void respawn(PlayerRespawnEvent event) {
+        final Player player = event.getEntity();
+
+        if (plugin.getEssentialsGame().getSpawn() != null) {
+            event.setSpawnLocation(plugin.getEssentialsGame().getSpawn());
+        }
+    }
+    */
 }
