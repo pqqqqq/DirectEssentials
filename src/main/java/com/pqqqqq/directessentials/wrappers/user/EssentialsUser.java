@@ -21,7 +21,7 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     private String uuid;
 
     private Optional<Player> cachedPlayer = Optional.<Player> absent();
-    private String lastCachedUsername;
+    private String lastCachedUsername = null;
 
     private final WeakEssentialsMap<String, Home> homes = new WeakEssentialsMap<String, Home>();
 
@@ -29,8 +29,12 @@ public class EssentialsUser implements IWeakValue, ISaveable {
 
     public static Map<String, EssentialsUser> loadUsers(ConfigurationNode node) {
         Map<String, EssentialsUser> users = new HashMap<String, EssentialsUser>();
-        for (ConfigurationNode user : node.getChildrenMap().values()) {
+
+        ConfigurationNode usersNode = node.getNode("users");
+        for (ConfigurationNode user : usersNode.getChildrenMap().values()) {
             EssentialsUser userObj = new EssentialsUser(user.getKey().toString());
+
+            userObj.setLastCachedUsername(user.getNode("username").getString(null)); // Load username
             userObj.getHomes().putAll(Home.loadHomes(user, userObj)); // Load homes
 
             users.put(user.getKey().toString(), userObj);
@@ -55,16 +59,16 @@ public class EssentialsUser implements IWeakValue, ISaveable {
      * @return the player
      */
     public Optional<Player> getPlayer() {
-        if (cachedPlayer.isPresent() && cachedPlayer.get().isLoaded() && !cachedPlayer.get().isRemoved()) {
+        if (this.cachedPlayer.isPresent() && this.cachedPlayer.get().isLoaded() && !this.cachedPlayer.get().isRemoved()) {
             return cachedPlayer;
         }
 
-        Optional<Player> player = DirectEssentials.plugin.getGame().getServer().getPlayer(UUID.fromString(uuid));
+        Optional<Player> player = DirectEssentials.plugin.getGame().getServer().getPlayer(UUID.fromString(this.uuid));
         if (player.isPresent()) {
-            lastCachedUsername = player.get().getName();
+            this.lastCachedUsername = player.get().getName();
         }
 
-        return (cachedPlayer = player);
+        return (this.cachedPlayer = player);
     }
 
     /**
@@ -100,7 +104,14 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     }
 
     public void save(ConfigurationNode node) {
-        ConfigurationNode user = node.getNode(this.uuid);
+        ConfigurationNode users = node.getNode("users");
+        ConfigurationNode user = users.getNode(this.uuid);
+
+        // Save username
+        getPlayer(); // For retrieving the cached username
+        if (lastCachedUsername != null) {
+            user.getNode("username").setValue(lastCachedUsername);
+        }
 
         // Save homes
         for (Home home : homes) {

@@ -1,15 +1,12 @@
 package com.pqqqqq.directessentials.data;
 
-import com.flowpowered.math.vector.Vector3d;
-import com.google.common.base.Optional;
-import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.util.SaveUtils;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +25,10 @@ public class Home implements IWeakValue, ISaveable {
         ConfigurationNode homesNode = node.getNode("homes");
         for (ConfigurationNode home : homesNode.getChildrenMap().values()) {
             Home homeObj = new Home(home.getKey().toString(), user.getUuid());
+            Location location = SaveUtils.loadLocation(home);
 
-            String world = home.getNode("world").getString();
-            double x = home.getNode("x").getDouble();
-            double y = home.getNode("y").getDouble();
-            double z = home.getNode("z").getDouble();
-
-            Optional<World> worldObj = DirectEssentials.plugin.getGame().getServer().getWorld(world);
-            if (worldObj.isPresent()) {
-                homeObj.setLocation(new Location(worldObj.get(), new Vector3d(x, y, z)));
+            if (location != null) {
+                homeObj.setLocation(location);
                 homes.put(home.getKey().toString(), homeObj);
             }
         }
@@ -85,12 +77,9 @@ public class Home implements IWeakValue, ISaveable {
         // TODO: Commenting??
         if (location != null) {
             ConfigurationNode warps = node.getNode("homes");
-            ConfigurationNode thisWarp = warps.getNode(name);
+            ConfigurationNode thisHome = warps.getNode(name);
 
-            thisWarp.getNode("world").setValue(((World) location.getExtent()).getName());
-            thisWarp.getNode("x").setValue(location.getX());
-            thisWarp.getNode("y").setValue(location.getY());
-            thisWarp.getNode("z").setValue(location.getZ());
+            SaveUtils.saveLocation(this.location, thisHome);
         }
     }
 }

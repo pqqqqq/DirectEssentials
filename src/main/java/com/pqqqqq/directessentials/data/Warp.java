@@ -1,14 +1,11 @@
 package com.pqqqqq.directessentials.data;
 
-import com.flowpowered.math.vector.Vector3d;
-import com.google.common.base.Optional;
-import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.util.SaveUtils;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,15 +23,10 @@ public class Warp implements IWeakValue, ISaveable {
         ConfigurationNode warpsNode = node.getNode("warps");
         for (ConfigurationNode warp : warpsNode.getChildrenMap().values()) {
             Warp warpObj = new Warp(warp.getKey().toString());
+            Location location = SaveUtils.loadLocation(warp);
 
-            String world = warp.getNode("world").getString();
-            double x = warp.getNode("x").getDouble();
-            double y = warp.getNode("y").getDouble();
-            double z = warp.getNode("z").getDouble();
-
-            Optional<World> worldObj = DirectEssentials.plugin.getGame().getServer().getWorld(world);
-            if (worldObj.isPresent()) {
-                warpObj.setLocation(new Location(worldObj.get(), new Vector3d(x, y, z)));
+            if (location != null) {
+                warpObj.setLocation(location);
                 warps.put(warp.getKey().toString(), warpObj);
             }
         }
@@ -80,10 +72,7 @@ public class Warp implements IWeakValue, ISaveable {
             ConfigurationNode warps = node.getNode("warps");
             ConfigurationNode thisWarp = warps.getNode(name);
 
-            thisWarp.getNode("world").setValue(((World) location.getExtent()).getName());
-            thisWarp.getNode("x").setValue(location.getX());
-            thisWarp.getNode("y").setValue(location.getY());
-            thisWarp.getNode("z").setValue(location.getZ());
+            SaveUtils.saveLocation(this.location, thisWarp);
         }
     }
 }

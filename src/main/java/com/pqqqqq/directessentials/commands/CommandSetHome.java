@@ -50,6 +50,11 @@ public class CommandSetHome extends CommandBase {
             return Optional.of(CommandResult.success());
         }
 
+        if (args[0].length() > 10) {
+            source.sendMessage(Texts.of(TextColors.RED, "Maximum name length is 10 characters for homes."));
+            return Optional.of(CommandResult.success());
+        }
+
         if (user.getHomes().contains(args[0])) {
             source.sendMessage(Texts.of(TextColors.RED, "A home already exists with this name."));
             return Optional.of(CommandResult.success());

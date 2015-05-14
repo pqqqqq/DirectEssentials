@@ -1,9 +1,8 @@
 package com.pqqqqq.directessentials.wrappers.game;
 
-import com.flowpowered.math.vector.Vector3d;
-import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.data.Warp;
+import com.pqqqqq.directessentials.util.SaveUtils;
 import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
@@ -13,7 +12,6 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 /**
  * Created by Kevin on 2015-05-12.
@@ -83,15 +81,7 @@ public class EssentialsGame implements ISaveable {
 
         // Spawn loading
         ConfigurationNode spawn = node.getNode("spawn");
-        String world = spawn.getNode("world").getString();
-        double x = spawn.getNode("x").getDouble();
-        double y = spawn.getNode("y").getDouble();
-        double z = spawn.getNode("z").getDouble();
-
-        Optional<World> worldObj = DirectEssentials.plugin.getGame().getServer().getWorld(world);
-        if (worldObj.isPresent()) {
-            this.spawn = new Location(worldObj.get(), new Vector3d(x, y, z));
-        }
+        this.spawn = SaveUtils.loadLocation(spawn);
     }
 
     public void save(ConfigurationNode node) {
@@ -111,13 +101,8 @@ public class EssentialsGame implements ISaveable {
         }
 
         // Spawn saving
-        if (this.spawn != null) {
-            ConfigurationNode spawn = node.getNode("spawn");
-            spawn.getNode("world").setValue(((World) this.spawn.getExtent()).getName());
-            spawn.getNode("x").setValue(this.spawn.getX());
-            spawn.getNode("y").setValue(this.spawn.getY());
-            spawn.getNode("z").setValue(this.spawn.getZ());
-        }
+        ConfigurationNode spawn = node.getNode("spawn");
+        SaveUtils.saveLocation(this.spawn, spawn);
     }
 
     public static class SaveTask implements Runnable {
