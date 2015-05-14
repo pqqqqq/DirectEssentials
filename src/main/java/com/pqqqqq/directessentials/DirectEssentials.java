@@ -15,7 +15,6 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.state.InitializationEvent;
 import org.spongepowered.api.event.state.ServerStartedEvent;
-import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
@@ -100,17 +99,6 @@ public class DirectEssentials {
 
         // Instantiate managers
         essentialsGame = new EssentialsGame(game);
-    }
-
-    @Subscribe
-    public void starting(ServerStartingEvent event) {
-        final long st = System.currentTimeMillis();
-        // Start a timeout schedule
-        game.getSyncScheduler().runTaskAfter(plugin, new Runnable() {
-            public void run() {
-                logger.info("" + (System.currentTimeMillis() - st)); // Tentative, remove when this is fixed.
-            }
-        }, 200);
     }
 
     @Subscribe
