@@ -15,6 +15,7 @@ import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.state.InitializationEvent;
 import org.spongepowered.api.event.state.ServerStartedEvent;
+import org.spongepowered.api.event.state.ServerStartingEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
@@ -71,34 +72,45 @@ public class DirectEssentials {
         CommandService commandService = game.getCommandDispatcher();
 
         // Warp commands
-        commandService.register(this, new CommandWarp(this), "warp");
-        commandService.register(this, new CommandSetWarp(this), "setwarp", "swarp");
-        commandService.register(this, new CommandDeleteWarp(this), "deletewarp", "dwarp", "removewarp", "delwarp");
+        commandService.register(this, CommandWarp.build(this), "warp");
+        commandService.register(this, CommandSetWarp.build(this), "setwarp", "swarp");
+        commandService.register(this, CommandDeleteWarp.build(this), "deletewarp", "dwarp", "removewarp", "delwarp");
 
         // Home commands
-        commandService.register(this, new CommandHome(this), "home");
-        commandService.register(this, new CommandSetHome(this), "sethome", "shome");
-        commandService.register(this, new CommandDeleteHome(this), "deletehome", "dhome", "removehome", "delhome");
+        commandService.register(this, CommandHome.build(this), "home");
+        commandService.register(this, CommandSetHome.build(this), "sethome", "shome");
+        commandService.register(this, CommandDeleteHome.build(this), "deletehome", "dhome", "removehome", "delhome");
 
         // Spawn commands
-        commandService.register(this, new CommandSpawn(this), "spawn");
-        commandService.register(this, new CommandSetSpawn(this), "setspawn");
+        commandService.register(this, CommandSpawn.build(this), "spawn");
+        commandService.register(this, CommandSetSpawn.build(this), "setspawn");
 
         // Teleport commands
-        commandService.register(this, new CommandTPA(this), "tpa");
-        commandService.register(this, new CommandTPAccept(this), "tpaccept");
-        commandService.register(this, new CommandTPAHere(this), "tpahere");
-        commandService.register(this, new CommandTPO(this), "tpo", "tp", "teleport", "tele");
+        commandService.register(this, CommandTPA.build(this), "tpa");
+        commandService.register(this, CommandTPAccept.build(this), "tpaccept");
+        commandService.register(this, CommandTPAHere.build(this), "tpahere");
+        commandService.register(this, CommandTPO.build(this), "tpo", "tp", "teleport", "tele");
 
         // Essentials main plugin commands
         SimpleDispatcher essentialsCommand = new SimpleDispatcher();
-        essentialsCommand.register(new CommandSave(this), "save");
-        essentialsCommand.register(new CommandReload(this), "reload");
+        essentialsCommand.register(CommandSave.build(this), "save");
+        essentialsCommand.register(CommandReload.build(this), "reload");
 
         commandService.register(this, essentialsCommand, "essentials", "ess", "de", "directessentials", "dessentials", "dess");
 
         // Instantiate managers
         essentialsGame = new EssentialsGame(game);
+    }
+
+    @Subscribe
+    public void starting(ServerStartingEvent event) {
+        final long st = System.currentTimeMillis();
+        // Start a timeout schedule
+        game.getSyncScheduler().runTaskAfter(plugin, new Runnable() {
+            public void run() {
+                logger.info("" + (System.currentTimeMillis() - st)); // Tentative, remove when this is fixed.
+            }
+        }, 200);
     }
 
     @Subscribe

@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextBuilder;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.action.TextActions;
@@ -12,37 +11,43 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
+import org.spongepowered.api.util.command.args.CommandContext;
+import org.spongepowered.api.util.command.args.GenericArguments;
+import org.spongepowered.api.util.command.spec.CommandExecutor;
+import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import java.util.Map;
 
 /**
  * Created by Kevin on 2015-05-13.
  */
-public class CommandTPAccept extends CommandBase {
-    public static final Optional<Text> desc = Optional.<Text>of(Texts.of(TextColors.AQUA, "Accepts a teleport request."));
-    public static final Optional<Text> help = Optional.<Text>of(Texts.of(TextColors.AQUA, "Accepts a teleport request."));
-    public static final Text usage = Texts.of(TextColors.AQUA, "/tpa [player]");
+public class CommandTPAccept implements CommandExecutor {
+    private DirectEssentials plugin;
 
-    public CommandTPAccept(DirectEssentials plugin) {
-        super(plugin);
+    private CommandTPAccept(DirectEssentials plugin) {
+        this.plugin = plugin;
     }
 
-    public Optional<CommandResult> process(CommandSource source, String arguments) throws CommandException {
+    public static CommandSpec build(DirectEssentials plugin) {
+        return CommandSpec.builder().setExecutor(new CommandTPAccept(plugin)).setDescription(Texts.of(TextColors.AQUA, "Accept an incoming TP request"))
+                .setArguments(GenericArguments.optional(GenericArguments.player(Texts.of("Player"), plugin.getGame()))).build();
+    }
+
+    public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
         if (!testPermission(source)) {
             source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         Player player = (Player) source;
         EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
 
-        String[] args = arguments.trim().split(" ");
-        if (arguments.trim().isEmpty()) {
+        if (!arguments.hasAny("Player")) {
             // List teleport requests
             TextBuilder requestText = Texts.builder("Pending requests (* = here): ").color(TextColors.AQUA);
             int num = 0;
@@ -58,17 +63,17 @@ public class CommandTPAccept extends CommandBase {
                 source.sendMessage(requestText.build());
             }
         } else {
-            Optional<Player> accept = plugin.getGame().getServer().getPlayer(args[0]);
+            Optional<Player> accept = arguments.<Player>getOne("Player");
             if (!accept.isPresent()) {
-                source.sendMessage(Texts.of(TextColors.RED, "Invalid player: ", TextColors.WHITE, args[0]));
-                return Optional.of(CommandResult.success());
+                source.sendMessage(Texts.of(TextColors.RED, "This player is currently not online."));
+                return CommandResult.success();
             }
 
             EssentialsUser acceptUser = plugin.getEssentialsGame().getOrCreateUser(accept.get().getUniqueId().toString());
             Boolean teleportHere = user.getTpRequests().remove(acceptUser);
             if (teleportHere == null) {
                 source.sendMessage(Texts.of(TextColors.WHITE, accept.get().getName(), TextColors.AQUA, " has not requested a teleportation from you."));
-                return Optional.of(CommandResult.success());
+                return CommandResult.success();
             }
 
             acceptUser.setRequestingTeleport(false);
@@ -82,22 +87,10 @@ public class CommandTPAccept extends CommandBase {
                 accept.get().sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request, teleported to ", TextColors.WHITE, player.getName()));
             }
         }
-        return Optional.of(CommandResult.success());
+        return CommandResult.success();
     }
 
     public boolean testPermission(CommandSource source) {
         return source.hasPermission("directessentials.tpaccept") || source.hasPermission("directessentials.*");
-    }
-
-    public Optional<Text> getShortDescription(CommandSource source) {
-        return desc;
-    }
-
-    public Optional<Text> getHelp(CommandSource source) {
-        return help;
-    }
-
-    public Text getUsage(CommandSource source) {
-        return usage;
     }
 }

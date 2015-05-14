@@ -1,70 +1,57 @@
 package com.pqqqqq.directessentials.commands;
 
-import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.commands.elements.EssentialsArguments;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
+import org.spongepowered.api.util.command.args.CommandContext;
+import org.spongepowered.api.util.command.spec.CommandExecutor;
+import org.spongepowered.api.util.command.spec.CommandSpec;
 
 /**
  * Created by Kevin on 2015-05-12.
  */
-public class CommandDeleteHome extends CommandBase {
-    public static final Optional<Text> desc = Optional.<Text>of(Texts.of(TextColors.AQUA, "Deletes a home to a place."));
-    public static final Optional<Text> help = Optional.<Text>of(Texts.of(TextColors.AQUA, "Deletes a home to a place."));
-    public static final Text usage = Texts.of(TextColors.AQUA, "/deletehome <name>");
+public class CommandDeleteHome implements CommandExecutor {
+    private DirectEssentials plugin;
 
-    public CommandDeleteHome(DirectEssentials plugin) {
-        super(plugin);
+    private CommandDeleteHome(DirectEssentials plugin) {
+        this.plugin = plugin;
     }
 
-    public Optional<CommandResult> process(CommandSource source, String arguments) throws CommandException {
+    public static CommandSpec build(DirectEssentials plugin) {
+        return CommandSpec.builder().setExecutor(new CommandDeleteHome(plugin)).setDescription(Texts.of(TextColors.AQUA, "Deletes a player's home."))
+                .setArguments(EssentialsArguments.home(Texts.of("HomeName"), plugin)).build();
+    }
+
+    public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
         if (!testPermission(source)) {
             source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         Player player = (Player) source;
         EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
-        String[] args = arguments.trim().split(" ");
 
-        if (arguments.trim().isEmpty()) {
-            source.sendMessage(getUsage(source));
-            return Optional.of(CommandResult.success());
-        }
-
-        if (user.getHomes().remove(args[0]) == null) {
+        if (user.getHomes().remove(arguments.<String>getOne("HomeName").get()) == null) {
             source.sendMessage(Texts.of(TextColors.RED, "There is no home with this name."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         source.sendMessage(Texts.of(TextColors.GREEN, "Home deleted successfully."));
-        return Optional.of(CommandResult.success());
+        return CommandResult.success();
     }
 
     public boolean testPermission(CommandSource source) {
         return source.hasPermission("directessentials.home") || source.hasPermission("directessentials.*");
-    }
-
-    public Optional<Text> getShortDescription(CommandSource source) {
-        return desc;
-    }
-
-    public Optional<Text> getHelp(CommandSource source) {
-        return help;
-    }
-
-    public Text getUsage(CommandSource source) {
-        return usage;
     }
 }

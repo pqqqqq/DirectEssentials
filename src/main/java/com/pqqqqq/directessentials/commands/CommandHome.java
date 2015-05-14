@@ -1,11 +1,10 @@
 package com.pqqqqq.directessentials.commands;
 
-import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
+import com.pqqqqq.directessentials.commands.elements.EssentialsArguments;
 import com.pqqqqq.directessentials.data.Home;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextBuilder;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.action.TextActions;
@@ -13,35 +12,41 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
+import org.spongepowered.api.util.command.args.CommandContext;
+import org.spongepowered.api.util.command.args.GenericArguments;
+import org.spongepowered.api.util.command.spec.CommandExecutor;
+import org.spongepowered.api.util.command.spec.CommandSpec;
 
 /**
  * Created by Kevin on 2015-05-12.
  */
-public class CommandHome extends CommandBase {
-    public static final Optional<Text> desc = Optional.<Text>of(Texts.of(TextColors.AQUA, "Teleports to a home."));
-    public static final Optional<Text> help = Optional.<Text>of(Texts.of(TextColors.AQUA, "Teleports to a home."));
-    public static final Text usage = Texts.of(TextColors.AQUA, "/home <name>");
+public class CommandHome implements CommandExecutor {
+    private DirectEssentials plugin;
 
-    public CommandHome(DirectEssentials plugin) {
-        super(plugin);
+    private CommandHome(DirectEssentials plugin) {
+        this.plugin = plugin;
     }
 
-    public Optional<CommandResult> process(CommandSource source, String arguments) throws CommandException {
+    public static CommandSpec build(DirectEssentials plugin) {
+        return CommandSpec.builder().setExecutor(new CommandHome(plugin)).setDescription(Texts.of(TextColors.AQUA, "Teleports to a home."))
+                .setArguments(GenericArguments.optional(EssentialsArguments.home(Texts.of("HomeName"), plugin))).build();
+    }
+
+    public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
         if (!testPermission(source)) {
             source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
         Player player = (Player) source;
         EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
-        String[] args = arguments.trim().split(" ");
 
-        if (arguments.trim().isEmpty()) {
+        if (!arguments.hasAny("HomeName")) {
             // List warps
             TextBuilder builder = Texts.builder("Available homes: ").color(TextColors.AQUA);
             int num = 0;
@@ -56,13 +61,15 @@ public class CommandHome extends CommandBase {
             } else {
                 source.sendMessage(builder.build());
             }
-            return Optional.of(CommandResult.success());
+            return CommandResult.success();
         }
 
-        Home home = user.getHomes().get(args[0]);
+        String homeName = arguments.<String>getOne("HomeName").get();
+        Home home = user.getHomes().get(homeName);
+
         if (home == null) {
-            source.sendMessage(Texts.of(TextColors.RED, "Invalid home: ", TextColors.WHITE, args[0]));
-            return Optional.of(CommandResult.success());
+            source.sendMessage(Texts.of(TextColors.RED, "Invalid home: ", TextColors.WHITE, homeName));
+            return CommandResult.success();
         }
 
         if (home.apply(player)) {
@@ -70,22 +77,10 @@ public class CommandHome extends CommandBase {
         } else {
             source.sendMessage(Texts.of(TextColors.RED, "Could not be teleported home."));
         }
-        return Optional.of(CommandResult.success());
+        return CommandResult.success();
     }
 
     public boolean testPermission(CommandSource source) {
         return source.hasPermission("directessentials.home") || source.hasPermission("directessentials.*");
-    }
-
-    public Optional<Text> getShortDescription(CommandSource source) {
-        return desc;
-    }
-
-    public Optional<Text> getHelp(CommandSource source) {
-        return help;
-    }
-
-    public Text getUsage(CommandSource source) {
-        return usage;
     }
 }
