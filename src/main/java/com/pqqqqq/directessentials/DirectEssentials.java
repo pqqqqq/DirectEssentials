@@ -84,6 +84,12 @@ public class DirectEssentials {
         commandService.register(this, new CommandSpawn(this), "spawn");
         commandService.register(this, new CommandSetSpawn(this), "setspawn");
 
+        // Teleport commands
+        commandService.register(this, new CommandTPA(this), "tpa");
+        commandService.register(this, new CommandTPAccept(this), "tpaccept");
+        commandService.register(this, new CommandTPAHere(this), "tpahere");
+        commandService.register(this, new CommandTPO(this), "tpo", "tp", "teleport", "tele");
+
         // Essentials main plugin commands
         SimpleDispatcher essentialsCommand = new SimpleDispatcher();
         essentialsCommand.register(new CommandSave(this), "save");

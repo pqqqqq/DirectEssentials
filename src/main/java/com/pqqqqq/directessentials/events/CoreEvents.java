@@ -60,7 +60,7 @@ public class CoreEvents {
 
             if (command.toLowerCase().startsWith(run.toLowerCase())) { // Basic run of the command
                 // Check if timer still in event
-                if (user.getCommandDelay().containsKey(eventCommand)) {
+                if (user.getCommandDelay().contains(eventCommand)) {
                     // Too bad, can't run right now.
                     player.sendMessage(Texts.of(TextColors.AQUA, "Please wait ", TextColors.WHITE, eventCommand.getTimerSeconds(), TextColors.AQUA, " second(s) before running this command again."));
                     event.setCancelled(true);
@@ -73,7 +73,7 @@ public class CoreEvents {
                 // Shortcuts
                 for (String alias : eventCommand.getShortcuts()) {
                     if (command.toLowerCase().startsWith(alias.toLowerCase())) {
-                        if (user.getCommandDelay().containsKey(eventCommand)) {
+                        if (user.getCommandDelay().contains(eventCommand)) {
                             // Too bad, can't run right now.
                             player.sendMessage(Texts.of(TextColors.AQUA, "Please wait ", TextColors.WHITE, eventCommand.getTimerSeconds(), TextColors.AQUA, " second(s) before running this command again."));
                             event.setCancelled(true);
@@ -100,7 +100,7 @@ public class CoreEvents {
 
             // Timer
             if (didRun && eventCommand.getTimerSeconds() > 0) {
-                user.getCommandDelay().put(eventCommand, true); // Add delay
+                user.getCommandDelay().add(eventCommand); // Add delay
                 plugin.getGame().getAsyncScheduler().runTaskAfter(plugin, new Runnable() { // Start async task to unset delay
 
                     public void run() {

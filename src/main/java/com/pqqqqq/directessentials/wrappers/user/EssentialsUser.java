@@ -10,9 +10,7 @@ import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.player.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Kevin on 2015-05-11.
@@ -20,12 +18,17 @@ import java.util.UUID;
 public class EssentialsUser implements IWeakValue, ISaveable {
     private String uuid;
 
+    // Stuff to save
+    private final WeakEssentialsMap<String, Home> homes = new WeakEssentialsMap<String, Home>();
+
+    // Cache stuff
     private Optional<Player> cachedPlayer = Optional.<Player> absent();
     private String lastCachedUsername = null;
 
-    private final WeakEssentialsMap<String, Home> homes = new WeakEssentialsMap<String, Home>();
+    private boolean requestingTeleport = false;
+    private final Map<EssentialsUser, Boolean> tpRequests = new HashMap<EssentialsUser, Boolean>(); // True means teleport here
 
-    private final Map<EventCommand, Boolean> commandDelay = new HashMap<EventCommand, Boolean>();
+    private final Set<EventCommand> commandDelay = new HashSet<EventCommand>();
 
     public static Map<String, EssentialsUser> loadUsers(ConfigurationNode node) {
         Map<String, EssentialsUser> users = new HashMap<String, EssentialsUser>();
@@ -95,12 +98,25 @@ public class EssentialsUser implements IWeakValue, ISaveable {
         return this.homes.getOrCreate(name, new Home(), name, this.uuid);
     }
 
-    public Map<EventCommand, Boolean> getCommandDelay() {
+    public Set<EventCommand> getCommandDelay() {
         return commandDelay;
+    }
+
+    public boolean isRequestingTeleport() {
+        return requestingTeleport;
+    }
+
+    public void setRequestingTeleport(boolean requestingTeleport) {
+        this.requestingTeleport = requestingTeleport;
+    }
+
+    public Map<EssentialsUser, Boolean> getTpRequests() {
+        return tpRequests;
     }
 
     public void init(Object... args) {
         this.uuid = (String) args[0];
+        getPlayer(); // To get cached username
     }
 
     public void save(ConfigurationNode node) {
