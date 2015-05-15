@@ -104,6 +104,9 @@ public class DirectEssentials {
         essentialsCommand.register(CommandSave.build(this), "save");
         essentialsCommand.register(CommandReload.build(this), "reload");
 
+        // Miscellaneous commands
+        commandService.register(this, CommandMotd.build(this), "motd");
+
         commandService.register(this, essentialsCommand, "essentials", "ess", "de", "directessentials", "dessentials", "dess");
 
         // Instantiate managers

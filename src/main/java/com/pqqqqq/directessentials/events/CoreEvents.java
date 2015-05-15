@@ -10,6 +10,7 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.entity.player.PlayerJoinEvent;
 import org.spongepowered.api.event.message.CommandEvent;
+import org.spongepowered.api.event.server.StatusPingEvent;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
@@ -109,6 +110,15 @@ public class CoreEvents {
                 }, TimeUnit.SECONDS, eventCommand.getTimerSeconds());
                 return; // Return because we found the command we were looking for
             }
+        }
+    }
+
+    // MOTD
+    @Subscribe
+    public void ping(StatusPingEvent event) {
+        String motd = plugin.getEssentialsGame().getMotd();
+        if (motd != null) {
+            event.getResponse().setDescription(Texts.of(motd));
         }
     }
 

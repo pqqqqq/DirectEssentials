@@ -4,6 +4,7 @@ import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.data.Warp;
 import com.pqqqqq.directessentials.data.region.Region;
 import com.pqqqqq.directessentials.util.SaveUtils;
+import com.pqqqqq.directessentials.util.Utilities;
 import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
@@ -28,6 +29,7 @@ public class EssentialsGame implements ISaveable {
     private final WeakEssentialsMap<String, Warp> warps = new WeakEssentialsMap<String, Warp>();
     private final WeakEssentialsMap<String, Region> regions = new WeakEssentialsMap<String, Region>();
     private Location spawn = null;
+    private String motd = null;
 
     public EssentialsGame(Game game) {
         this.game = game;
@@ -73,6 +75,14 @@ public class EssentialsGame implements ISaveable {
         this.spawn = spawn;
     }
 
+    public String getMotd() {
+        return motd;
+    }
+
+    public void setMotd(String motd) {
+        this.motd = motd;
+    }
+
     public void load(ConfigurationNode node) {
         // World loading
         worlds.clear();
@@ -92,6 +102,9 @@ public class EssentialsGame implements ISaveable {
         // Spawn loading
         ConfigurationNode spawn = node.getNode("spawn");
         this.spawn = SaveUtils.loadLocation(spawn);
+
+        // MOTD loading
+        this.motd = Utilities.formatColour(node.getNode("MOTD").getString(null));
     }
 
     public void save(ConfigurationNode node) {
@@ -118,6 +131,11 @@ public class EssentialsGame implements ISaveable {
         // Spawn saving
         ConfigurationNode spawn = node.getNode("spawn");
         SaveUtils.saveLocation(this.spawn, spawn);
+
+        // MOTD saving
+        if (this.motd != null) {
+            node.getNode("MOTD").setValue(Utilities.unformatColour(this.motd));
+        }
     }
 
     public static class SaveTask implements Runnable {
