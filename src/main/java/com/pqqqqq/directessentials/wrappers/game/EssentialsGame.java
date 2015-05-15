@@ -2,6 +2,7 @@ package com.pqqqqq.directessentials.wrappers.game;
 
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.data.Warp;
+import com.pqqqqq.directessentials.data.region.Region;
 import com.pqqqqq.directessentials.util.SaveUtils;
 import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
@@ -25,6 +26,7 @@ public class EssentialsGame implements ISaveable {
 
     // Other data
     private final WeakEssentialsMap<String, Warp> warps = new WeakEssentialsMap<String, Warp>();
+    private final WeakEssentialsMap<String, Region> regions = new WeakEssentialsMap<String, Region>();
     private Location spawn = null;
 
     public EssentialsGame(Game game) {
@@ -59,6 +61,10 @@ public class EssentialsGame implements ISaveable {
         return warps.getOrCreate(name, new Warp(), name);
     }
 
+    public WeakEssentialsMap<String, Region> getRegions() {
+        return regions;
+    }
+
     public Location getSpawn() {
         return spawn;
     }
@@ -79,6 +85,10 @@ public class EssentialsGame implements ISaveable {
         warps.clear();
         warps.putAll(Warp.loadWarps(node));
 
+        // Region loading
+        regions.clear();
+        regions.putAll(Region.loadRegions(node));
+
         // Spawn loading
         ConfigurationNode spawn = node.getNode("spawn");
         this.spawn = SaveUtils.loadLocation(spawn);
@@ -98,6 +108,11 @@ public class EssentialsGame implements ISaveable {
         // Warps saving
         for (Warp warp : warps) {
             warp.save(node);
+        }
+
+        // Region saving
+        for (Region region : regions) {
+            region.save(node);
         }
 
         // Spawn saving

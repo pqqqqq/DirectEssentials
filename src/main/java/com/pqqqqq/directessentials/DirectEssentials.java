@@ -4,9 +4,11 @@ import com.google.inject.Inject;
 import com.pqqqqq.directessentials.commands.*;
 import com.pqqqqq.directessentials.commands.essentials.CommandReload;
 import com.pqqqqq.directessentials.commands.essentials.CommandSave;
+import com.pqqqqq.directessentials.commands.region.CommandCreate;
 import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.config.DataConfig;
 import com.pqqqqq.directessentials.events.CoreEvents;
+import com.pqqqqq.directessentials.events.ProtectionEvents;
 import com.pqqqqq.directessentials.wrappers.game.EssentialsGame;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -66,6 +68,7 @@ public class DirectEssentials {
         // Register events
         EventManager eventManager = game.getEventManager();
         eventManager.register(this, new CoreEvents(this));
+        eventManager.register(this, new ProtectionEvents(this));
 
         // Register commands
         CommandService commandService = game.getCommandDispatcher();
@@ -89,6 +92,12 @@ public class DirectEssentials {
         commandService.register(this, CommandTPAccept.build(this), "tpaccept");
         commandService.register(this, CommandTPAHere.build(this), "tpahere");
         commandService.register(this, CommandTPO.build(this), "tpo", "tp", "teleport", "tele");
+
+        // Region commands
+        SimpleDispatcher regionCommand = new SimpleDispatcher();
+        regionCommand.register(CommandCreate.build(this), "create", "c");
+
+        commandService.register(this, regionCommand, "region", "rg");
 
         // Essentials main plugin commands
         SimpleDispatcher essentialsCommand = new SimpleDispatcher();

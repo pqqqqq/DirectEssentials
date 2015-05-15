@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.commands.config.EventCommand;
 import com.pqqqqq.directessentials.data.Home;
+import com.pqqqqq.directessentials.data.region.Cuboid;
 import com.pqqqqq.directessentials.wrappers.WeakEssentialsMap;
 import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
@@ -29,6 +30,9 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     private final Map<EssentialsUser, Boolean> tpRequests = new HashMap<EssentialsUser, Boolean>(); // True means teleport here
 
     private final Set<EventCommand> commandDelay = new HashSet<EventCommand>();
+
+    private final Cuboid regionSelection = new Cuboid();
+    private boolean regionSelectDelay = false;
 
     public static Map<String, EssentialsUser> loadUsers(ConfigurationNode node) {
         Map<String, EssentialsUser> users = new HashMap<String, EssentialsUser>();
@@ -63,6 +67,7 @@ public class EssentialsUser implements IWeakValue, ISaveable {
      */
     public Optional<Player> getPlayer() {
         if (this.cachedPlayer.isPresent() && this.cachedPlayer.get().isLoaded() && !this.cachedPlayer.get().isRemoved()) {
+            this.lastCachedUsername = cachedPlayer.get().getName();
             return cachedPlayer;
         }
 
@@ -112,6 +117,18 @@ public class EssentialsUser implements IWeakValue, ISaveable {
 
     public Map<EssentialsUser, Boolean> getTpRequests() {
         return tpRequests;
+    }
+
+    public Cuboid getRegionSelection() {
+        return regionSelection;
+    }
+
+    public boolean isRegionSelectDelay() {
+        return regionSelectDelay;
+    }
+
+    public void setRegionSelectDelay(boolean regionSelectDelay) {
+        this.regionSelectDelay = regionSelectDelay;
     }
 
     public void init(Object... args) {

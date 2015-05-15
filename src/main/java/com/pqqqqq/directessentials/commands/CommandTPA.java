@@ -16,6 +16,8 @@ import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Kevin on 2015-05-13.
  */
@@ -72,18 +74,25 @@ public class CommandTPA implements CommandExecutor {
 
         request.get().sendMessage(requestText.build());
 
-        final long st = System.currentTimeMillis();
         // Start a timeout schedule
-        plugin.getGame().getSyncScheduler().runTaskAfter(plugin, new Runnable() {
+        // TODO: Change to a sync scheduler when fixed, but async is fine for now.
+        plugin.getGame().getAsyncScheduler().runTaskAfter(plugin, new Runnable() {
+
+            public void run() {
+                user.setRequestingTeleport(false);
+                tpRequestUser.getTpRequests().remove(user);
+                player.sendMessage(Texts.of(TextColors.AQUA, "Your teleport request timed out."));
+            }
+        }, TimeUnit.SECONDS, 10);
+        /*plugin.getGame().getSyncScheduler().runTaskAfter(plugin, new Runnable() {
             public void run() {
                 if (user.isRequestingTeleport()) {
                     user.setRequestingTeleport(false);
                     tpRequestUser.getTpRequests().remove(user);
                     player.sendMessage(Texts.of(TextColors.AQUA, "Your teleport request timed out."));
-                    player.sendMessage(Texts.of(TextColors.AQUA, (System.currentTimeMillis() - st))); // Tentative, remove when this is fixed.
                 }
             }
-        }, 200);
+        }, 200);*/
         return CommandResult.success();
     }
 

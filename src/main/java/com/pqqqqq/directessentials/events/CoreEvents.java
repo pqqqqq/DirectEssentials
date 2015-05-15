@@ -33,7 +33,7 @@ public class CoreEvents {
     @Subscribe
     public void join(PlayerJoinEvent event) {
         Player player = event.getEntity();
-        plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
+        EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
 
         // Teleport to spawn if it exists
         if (plugin.getEssentialsGame().getSpawn() != null) {

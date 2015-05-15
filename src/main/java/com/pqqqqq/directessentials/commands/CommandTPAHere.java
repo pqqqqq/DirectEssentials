@@ -16,6 +16,8 @@ import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Kevin on 2015-05-13.
  */
@@ -73,7 +75,16 @@ public class CommandTPAHere implements CommandExecutor {
         request.get().sendMessage(requestText.build());
 
         // Start a timeout schedule
-        plugin.getGame().getSyncScheduler().runTaskAfter(plugin, new Runnable() {
+        plugin.getGame().getAsyncScheduler().runTaskAfter(plugin, new Runnable() {
+
+            public void run() {
+                user.setRequestingTeleport(false);
+                tpRequestUser.getTpRequests().remove(user);
+                player.sendMessage(Texts.of(TextColors.AQUA, "Your teleport request timed out."));
+            }
+        }, TimeUnit.SECONDS, 10);
+
+        /*plugin.getGame().getSyncScheduler().runTaskAfter(plugin, new Runnable() {
             public void run() {
                 if (user.isRequestingTeleport()) {
                     user.setRequestingTeleport(false);
@@ -81,7 +92,7 @@ public class CommandTPAHere implements CommandExecutor {
                     player.sendMessage(Texts.of(TextColors.AQUA, "Your teleport request timed out."));
                 }
             }
-        }, 200);
+        }, 200);*/
         return CommandResult.success();
     }
 

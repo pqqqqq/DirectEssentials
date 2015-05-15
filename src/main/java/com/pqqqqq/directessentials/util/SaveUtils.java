@@ -14,25 +14,44 @@ public class SaveUtils {
 
     // Location
     public static Location loadLocation(ConfigurationNode node) {
-        String world = node.getNode("world").getString();
-        double x = node.getNode("x").getDouble();
-        double y = node.getNode("y").getDouble();
-        double z = node.getNode("z").getDouble();
+        Vector3d vec = loadVector(node);
 
-        Optional<World> worldObj = DirectEssentials.plugin.getGame().getServer().getWorld(world);
+        Optional<World> worldObj = loadWorld(node);
         if (worldObj.isPresent()) {
-            return new Location(worldObj.get(), new Vector3d(x, y, z));
+            return new Location(worldObj.get(), vec);
         }
-
         return null;
     }
 
     public static void saveLocation(Location location, ConfigurationNode node) {
         if (location != null) {
-            node.getNode("world").setValue(((World) location.getExtent()).getName());
-            node.getNode("x").setValue(location.getX());
-            node.getNode("y").setValue(location.getY());
-            node.getNode("z").setValue(location.getZ());
+            saveWorld((World) location.getExtent(), node);
+            saveVector(location.getPosition(), node);
+        }
+    }
+
+    public static Vector3d loadVector(ConfigurationNode node) {
+        double x = node.getNode("x").getDouble();
+        double y = node.getNode("y").getDouble();
+        double z = node.getNode("z").getDouble();
+        return new Vector3d(x, y, z);
+    }
+
+    public static void saveVector(Vector3d vec, ConfigurationNode node) {
+        if (vec != null) {
+            node.getNode("x").setValue(vec.getX());
+            node.getNode("y").setValue(vec.getY());
+            node.getNode("z").setValue(vec.getZ());
+        }
+    }
+
+    public static Optional<World> loadWorld(ConfigurationNode node) {
+        return DirectEssentials.plugin.getGame().getServer().getWorld(node.getNode("world").getString());
+    }
+
+    public static void saveWorld(World world, ConfigurationNode node) {
+        if (world != null) {
+            node.getNode("world").setValue(world.getName());
         }
     }
 }

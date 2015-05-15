@@ -16,4 +16,8 @@ public class EssentialsArguments {
     public static CommandElement warp(Text key, DirectEssentials plugin) {
         return new WarpElement(key, plugin);
     }
+
+    public static CommandElement region(Text key, DirectEssentials plugin) {
+        return new RegionElement(key, plugin);
+    }
 }
