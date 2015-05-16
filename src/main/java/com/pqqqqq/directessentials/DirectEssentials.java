@@ -106,6 +106,7 @@ public class DirectEssentials {
 
         // Miscellaneous commands
         commandService.register(this, CommandMotd.build(this), "motd");
+        commandService.register(this, CommandHat.build(this), "hat", "head");
 
         commandService.register(this, essentialsCommand, "essentials", "ess", "de", "directessentials", "dessentials", "dess");
 

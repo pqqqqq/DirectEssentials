@@ -58,7 +58,7 @@ public class Warp implements IWeakValue, ISaveable {
             return false;
         }
 
-        player.setLocation(location);
+        player.setLocationSafely(location);
         return true;
     }
 

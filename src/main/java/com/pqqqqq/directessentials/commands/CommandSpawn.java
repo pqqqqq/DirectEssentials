@@ -43,7 +43,7 @@ public class CommandSpawn implements CommandExecutor {
             return CommandResult.success();
         }
 
-        player.setLocation(plugin.getEssentialsGame().getSpawn());
+        player.setLocationSafely(plugin.getEssentialsGame().getSpawn());
         source.sendMessage(Texts.of(TextColors.GREEN, "Teleported to spawn."));
         return CommandResult.success();
     }

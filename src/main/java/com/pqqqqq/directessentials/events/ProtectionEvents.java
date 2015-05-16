@@ -12,7 +12,6 @@ import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.entity.player.PlayerBreakBlockEvent;
-import org.spongepowered.api.event.entity.player.PlayerHarvestBlockEvent;
 import org.spongepowered.api.event.entity.player.PlayerInteractBlockEvent;
 import org.spongepowered.api.event.entity.player.PlayerPlaceBlockEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -92,10 +91,11 @@ public class ProtectionEvents {
         canBuild(event.getEntity(), event.getBlock(), event);
     }
 
+    /* TODO: Readd when implemented
     @Subscribe(order = Order.LAST)
     public void harvest(PlayerHarvestBlockEvent event) {
         canBuild(event.getEntity(), event.getBlock(), event);
-    }
+    }*/
 
     @Subscribe(order = Order.LAST)
     public void interactBlock(PlayerInteractBlockEvent event) {

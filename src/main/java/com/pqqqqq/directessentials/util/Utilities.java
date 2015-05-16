@@ -7,15 +7,13 @@ import org.spongepowered.api.text.Texts;
  */
 public class Utilities {
 
-    // TODO: Revisit formatting colours, as the latest builds of Sponge broke these commands.
-
     @SuppressWarnings("deprecation")
     public static String formatColour(String str) {
         if (str == null) {
             return null;
         }
 
-        return Texts.replaceCodes(str, '&', Texts.getLegacyChar());
+        return str.replaceAll("&([0-9a-fA-FkKlLmMnNoOrR])", Texts.getLegacyChar() + "$1");
     }
 
     @SuppressWarnings("deprecation")
@@ -24,15 +22,6 @@ public class Utilities {
             return null;
         }
 
-        return Texts.replaceCodes(str, Texts.getLegacyChar(), '&');
-    }
-
-    @SuppressWarnings("deprecation")
-    public static String stripColour(String str) {
-        if (str == null) {
-            return null;
-        }
-
-        return Texts.stripCodes(str);
+        return str.replaceAll(Texts.getLegacyChar() + "([0-9a-fA-FkKlLmMnNoOrR])", "&$1");
     }
 }

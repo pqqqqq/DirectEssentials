@@ -78,11 +78,11 @@ public class CommandTPAccept implements CommandExecutor {
 
             acceptUser.setRequestingTeleport(false);
             if (teleportHere) {
-                player.setLocation(accept.get().getLocation());
+                player.setLocationSafely(accept.get().getLocation());
                 player.sendMessage(Texts.of(TextColors.AQUA, "You accepted the teleport request, teleported to ", TextColors.WHITE, accept.get().getName()));
                 accept.get().sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request and was teleported to you."));
             } else {
-                accept.get().setLocation(player.getLocation());
+                accept.get().setLocationSafely(player.getLocation());
                 player.sendMessage(Texts.of(TextColors.AQUA, "You accepted the teleport request and ", TextColors.WHITE, accept.get().getName(), TextColors.AQUA, " was teleported to you."));
                 accept.get().sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request, teleported to ", TextColors.WHITE, player.getName()));
             }

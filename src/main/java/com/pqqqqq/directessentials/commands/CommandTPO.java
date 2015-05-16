@@ -47,7 +47,7 @@ public class CommandTPO implements CommandExecutor {
             return CommandResult.success();
         }
 
-        teleporter.get().setLocation(destination.get().getLocation());
+        teleporter.get().setLocationSafely(destination.get().getLocation());
         teleporter.get().sendMessage(Texts.of(TextColors.AQUA, "You have been teleported to: ", TextColors.WHITE, destination.get().getName()));
         if (!teleporter.equals(source)) {
             source.sendMessage(Texts.of(TextColors.AQUA, "Teleport successful."));

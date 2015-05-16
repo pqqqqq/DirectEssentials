@@ -29,7 +29,7 @@ public class CommandWarp implements CommandExecutor {
 
     public static CommandSpec build(DirectEssentials plugin) {
         return CommandSpec.builder().setExecutor(new CommandWarp(plugin)).setDescription(Texts.of(TextColors.AQUA, "Warp to a destiation."))
-                .setArguments(GenericArguments.optional(GenericArguments.seq(EssentialsArguments.warp(Texts.of("WarpName"), plugin), GenericArguments.playerOrSource(Texts.of("Warper"), plugin.getGame())))).build();
+                .setArguments(GenericArguments.optional(EssentialsArguments.warp(Texts.of("WarpName"), plugin), GenericArguments.playerOrSource(Texts.of("Warper"), plugin.getGame()))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

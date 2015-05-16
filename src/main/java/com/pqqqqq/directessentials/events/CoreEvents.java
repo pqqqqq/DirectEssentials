@@ -123,15 +123,13 @@ public class CoreEvents {
     }
 
     // Teleport back to spawn on death
-    /* TODO: Readd this when implemented by Sponge
-
+    /* TODO: Readd when implemented
     @Subscribe
     public void respawn(PlayerRespawnEvent event) {
         final Player player = event.getEntity();
 
         if (plugin.getEssentialsGame().getSpawn() != null) {
-            event.setSpawnLocation(plugin.getEssentialsGame().getSpawn());
+            event.setRespawnLocation(plugin.getEssentialsGame().getSpawn());
         }
-    }
-    */
+    }*/
 }
