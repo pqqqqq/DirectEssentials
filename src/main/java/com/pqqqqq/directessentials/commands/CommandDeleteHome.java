@@ -24,8 +24,8 @@ public class CommandDeleteHome implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandDeleteHome(plugin)).setDescription(Texts.of(TextColors.AQUA, "Deletes a player's home."))
-                .setArguments(EssentialsArguments.home(Texts.of("HomeName"), plugin)).build();
+        return CommandSpec.builder().executor(new CommandDeleteHome(plugin)).description(Texts.of(TextColors.AQUA, "Deletes a player's home."))
+                .arguments(EssentialsArguments.home(Texts.of("HomeName"), plugin)).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

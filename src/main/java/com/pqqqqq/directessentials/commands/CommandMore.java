@@ -16,15 +16,15 @@ import org.spongepowered.api.util.command.spec.CommandSpec;
 /**
  * Created by Kevin on 2015-05-15.
  */
-public class CommandHat implements CommandExecutor {
+public class CommandMore implements CommandExecutor {
     private DirectEssentials plugin;
 
-    private CommandHat(DirectEssentials plugin) {
+    private CommandMore(DirectEssentials plugin) {
         this.plugin = plugin;
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandHat(plugin)).description(Texts.of(TextColors.AQUA, "A wardrobe change")).build();
+        return CommandSpec.builder().executor(new CommandMore(plugin)).description(Texts.of(TextColors.AQUA, "Gets more of an item.")).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -39,19 +39,25 @@ public class CommandHat implements CommandExecutor {
         }
 
         Player player = (Player) src;
-        Optional<ItemStack> hand = player.getItemInHand();
+        Optional<ItemStack> handOptional = player.getItemInHand();
 
-        if (!hand.isPresent()) {
-            src.sendMessage(Texts.of(TextColors.RED, "You can't do that, you air-head."));
+        if (!handOptional.isPresent()) {
+            player.sendMessage(Texts.of(TextColors.RED, "Getting more air wouldn't be very useful."));
             return CommandResult.success();
         }
 
-        player.setHelmet(hand.get());
-        player.sendMessage(Texts.of(TextColors.GREEN, "You've prepared for war with your ", TextColors.WHITE, hand.get().getItem().getName(), TextColors.GREEN, " hat."));
+        ItemStack hnd = handOptional.get();
+        if (hnd.getQuantity() >= hnd.getMaxStackQuantity()) {
+            player.getInventory().offer(hnd);
+        } else {
+            hnd.setQuantity(hnd.getMaxStackQuantity());
+        }
+
+        player.sendMessage(Texts.of(TextColors.GREEN, "More ", TextColors.WHITE, hnd.getItem().getName(), TextColors.GREEN, " coming right up."));
         return CommandResult.success();
     }
 
     public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.hat");
+        return src.hasPermission("directessentials.more");
     }
 }

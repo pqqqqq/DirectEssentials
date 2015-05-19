@@ -22,7 +22,7 @@ public class CommandSpawn implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandSpawn(plugin)).setDescription(Texts.of(TextColors.AQUA, "Teleports to server spawn.")).build();
+        return CommandSpec.builder().executor(new CommandSpawn(plugin)).description(Texts.of(TextColors.AQUA, "Teleports to server spawn.")).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

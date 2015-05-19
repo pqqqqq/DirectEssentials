@@ -28,8 +28,8 @@ public class CommandHome implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandHome(plugin)).setDescription(Texts.of(TextColors.AQUA, "Teleports to a home."))
-                .setArguments(GenericArguments.optional(EssentialsArguments.home(Texts.of("HomeName"), plugin))).build();
+        return CommandSpec.builder().executor(new CommandHome(plugin)).description(Texts.of(TextColors.AQUA, "Teleports to a home."))
+                .arguments(GenericArguments.optional(EssentialsArguments.home(Texts.of("HomeName"), plugin))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

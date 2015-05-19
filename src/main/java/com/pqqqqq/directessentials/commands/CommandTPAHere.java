@@ -29,8 +29,8 @@ public class CommandTPAHere implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandTPAHere(plugin)).setDescription(Texts.of(TextColors.AQUA, "Request that a player teleports to you."))
-                .setArguments(GenericArguments.player(Texts.of("Player"), plugin.getGame())).build();
+        return CommandSpec.builder().executor(new CommandTPAHere(plugin)).description(Texts.of(TextColors.AQUA, "Request that a player teleports to you."))
+                .arguments(GenericArguments.player(Texts.of("Player"), plugin.getGame())).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

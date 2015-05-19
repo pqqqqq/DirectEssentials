@@ -21,7 +21,7 @@ public class CommandReload implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandReload(plugin)).setDescription(Texts.of(TextColors.AQUA, "Reloads the main config.")).build();
+        return CommandSpec.builder().executor(new CommandReload(plugin)).description(Texts.of(TextColors.AQUA, "Reloads the main config.")).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

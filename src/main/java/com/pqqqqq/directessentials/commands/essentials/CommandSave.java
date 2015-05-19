@@ -21,7 +21,7 @@ public class CommandSave implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandSave(plugin)).setDescription(Texts.of(TextColors.AQUA, "Saves the current data.")).build();
+        return CommandSpec.builder().executor(new CommandSave(plugin)).description(Texts.of(TextColors.AQUA, "Saves the current data.")).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

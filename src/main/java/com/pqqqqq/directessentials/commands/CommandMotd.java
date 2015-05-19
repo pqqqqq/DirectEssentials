@@ -23,8 +23,8 @@ public class CommandMotd implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandMotd(plugin)).setDescription(Texts.of(TextColors.AQUA, "Displays the MOTD."))
-                .setArguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Texts.of("MOTD")))).build();
+        return CommandSpec.builder().executor(new CommandMotd(plugin)).description(Texts.of(TextColors.AQUA, "Displays the MOTD."))
+                .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Texts.of("MOTD")))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

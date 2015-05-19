@@ -24,8 +24,8 @@ public class CommandSetWarp implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandSetWarp(plugin)).setDescription(Texts.of(TextColors.AQUA, "Sets a new server warp."))
-                .setArguments(GenericArguments.string(Texts.of("WarpName"))).build();
+        return CommandSpec.builder().executor(new CommandSetWarp(plugin)).description(Texts.of(TextColors.AQUA, "Sets a new server warp."))
+                .arguments(GenericArguments.string(Texts.of("WarpName"))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

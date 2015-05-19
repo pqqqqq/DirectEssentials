@@ -34,6 +34,8 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     private final Cuboid regionSelection = new Cuboid();
     private boolean regionSelectDelay = false;
 
+    private boolean invisible = false;
+
     public static Map<String, EssentialsUser> loadUsers(ConfigurationNode node) {
         Map<String, EssentialsUser> users = new HashMap<String, EssentialsUser>();
 
@@ -131,6 +133,14 @@ public class EssentialsUser implements IWeakValue, ISaveable {
         this.regionSelectDelay = regionSelectDelay;
     }
 
+    public boolean isInvisible() {
+        return invisible;
+    }
+
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
+    }
+
     public void init(Object... args) {
         this.uuid = (String) args[0];
         getPlayer(); // To get cached username
@@ -150,5 +160,10 @@ public class EssentialsUser implements IWeakValue, ISaveable {
         for (Home home : homes) {
             home.save(user);
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof EssentialsUser && uuid.equals(((EssentialsUser) obj).getUuid());
     }
 }

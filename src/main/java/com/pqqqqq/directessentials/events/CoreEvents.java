@@ -5,10 +5,12 @@ import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.commands.config.EventCommand;
 import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
+import org.spongepowered.api.data.manipulators.entities.InvisibilityData;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.Subscribe;
 import org.spongepowered.api.event.entity.player.PlayerJoinEvent;
+import org.spongepowered.api.event.entity.player.PlayerQuitEvent;
 import org.spongepowered.api.event.message.CommandEvent;
 import org.spongepowered.api.event.server.StatusPingEvent;
 import org.spongepowered.api.text.Texts;
@@ -31,14 +33,51 @@ public class CoreEvents {
     }
 
     // Set to spawn, create EssentialsUser instance
-    @Subscribe
+    @Subscribe(order = Order.LATE)
     public void join(PlayerJoinEvent event) {
         Player player = event.getEntity();
         EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
 
         // Teleport to spawn if it exists
         if (plugin.getEssentialsGame().getSpawn() != null) {
-            player.setLocation(plugin.getEssentialsGame().getSpawn());
+            event.setLocation(plugin.getEssentialsGame().getSpawn());
+        }
+
+        // Make players who are invisble invisble to the player
+        /*if (player.hasPermission("directessentials.invisible.override")) {
+            return;
+        }*/
+
+        for (EssentialsUser other : plugin.getEssentialsGame().getUsers().values()) {
+            if (!other.equals(user) && other.isInvisible()) {
+                Optional<Player> otherP = other.getPlayer();
+
+                if (otherP.isPresent()) {
+                    InvisibilityData invisibilityData = otherP.get().getData(InvisibilityData.class).get();
+                    invisibilityData.setInvisibleTo(player, true);
+                    otherP.get().offer(invisibilityData);
+                }
+            }
+        }
+    }
+
+    // Remove invisibility
+    @Subscribe
+    public void quit(PlayerQuitEvent event) {
+        Player player = event.getEntity();
+        EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
+
+        if (user.isInvisible()) {
+            InvisibilityData invisibilityData = player.getData(InvisibilityData.class).get();
+
+            for (Player online : plugin.getGame().getServer().getOnlinePlayers()) {
+                if (!online.equals(player) && invisibilityData.isInvisibleTo(online)) {
+                    invisibilityData.setInvisibleTo(online, false);
+                }
+            }
+
+            player.offer(invisibilityData);
+            user.setInvisible(false);
         }
     }
 

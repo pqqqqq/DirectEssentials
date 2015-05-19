@@ -29,8 +29,8 @@ public class CommandTPAccept implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandTPAccept(plugin)).setDescription(Texts.of(TextColors.AQUA, "Accept an incoming TP request"))
-                .setArguments(GenericArguments.optional(GenericArguments.player(Texts.of("Player"), plugin.getGame()))).build();
+        return CommandSpec.builder().executor(new CommandTPAccept(plugin)).description(Texts.of(TextColors.AQUA, "Accept an incoming TP request"))
+                .arguments(GenericArguments.optional(GenericArguments.player(Texts.of("Player"), plugin.getGame()))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

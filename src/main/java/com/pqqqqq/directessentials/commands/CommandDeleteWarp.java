@@ -22,8 +22,8 @@ public class CommandDeleteWarp implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandDeleteWarp(plugin)).setDescription(Texts.of(TextColors.AQUA, "Deletes a player warp."))
-                .setArguments(EssentialsArguments.warp(Texts.of("WarpName"), plugin)).build();
+        return CommandSpec.builder().executor(new CommandDeleteWarp(plugin)).description(Texts.of(TextColors.AQUA, "Deletes a player warp."))
+                .arguments(EssentialsArguments.warp(Texts.of("WarpName"), plugin)).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {

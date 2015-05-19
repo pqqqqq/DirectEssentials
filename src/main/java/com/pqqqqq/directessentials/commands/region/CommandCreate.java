@@ -26,8 +26,8 @@ public class CommandCreate implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandCreate(plugin)).setDescription(Texts.of(TextColors.AQUA, "Creates a new region"))
-                .setArguments(GenericArguments.string(Texts.of("RegionName"))).build();
+        return CommandSpec.builder().executor(new CommandCreate(plugin)).description(Texts.of(TextColors.AQUA, "Creates a new region"))
+                .arguments(GenericArguments.string(Texts.of("RegionName"))).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

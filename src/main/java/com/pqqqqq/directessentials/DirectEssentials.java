@@ -2,9 +2,8 @@ package com.pqqqqq.directessentials;
 
 import com.google.inject.Inject;
 import com.pqqqqq.directessentials.commands.*;
-import com.pqqqqq.directessentials.commands.essentials.CommandReload;
-import com.pqqqqq.directessentials.commands.essentials.CommandSave;
-import com.pqqqqq.directessentials.commands.region.CommandCreate;
+import com.pqqqqq.directessentials.commands.essentials.CommandEssentials;
+import com.pqqqqq.directessentials.commands.region.CommandRegion;
 import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.config.DataConfig;
 import com.pqqqqq.directessentials.events.CoreEvents;
@@ -22,7 +21,6 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.service.event.EventManager;
-import org.spongepowered.api.util.command.dispatcher.SimpleDispatcher;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -94,22 +92,22 @@ public class DirectEssentials {
         commandService.register(this, CommandTPO.build(this), "tpo", "tp", "teleport", "tele");
 
         // Region commands
-        SimpleDispatcher regionCommand = new SimpleDispatcher();
-        regionCommand.register(CommandCreate.build(this), "create", "c");
-
-        commandService.register(this, regionCommand, "region", "rg");
+        commandService.register(this, CommandRegion.build(this), "region", "rg");
 
         // Essentials main plugin commands
-        SimpleDispatcher essentialsCommand = new SimpleDispatcher();
-        essentialsCommand.register(CommandSave.build(this), "save");
-        essentialsCommand.register(CommandReload.build(this), "reload");
+        commandService.register(this, CommandEssentials.build(this), "essentials", "ess", "de", "directessentials", "dessentials", "dess");
 
         // Miscellaneous commands
         commandService.register(this, CommandMotd.build(this), "motd");
         commandService.register(this, CommandHat.build(this), "hat", "head");
-
-        commandService.register(this, essentialsCommand, "essentials", "ess", "de", "directessentials", "dessentials", "dess");
-
+        commandService.register(this, CommandHeal.build(this), "heal");
+        commandService.register(this, CommandEat.build(this), "feed", "eat");
+        commandService.register(this, CommandDisplayName.build(this), "displayname", "display", "dn");
+        commandService.register(this, CommandMore.build(this), "more");
+        commandService.register(this, CommandRepair.build(this), "repair", "fix");
+        commandService.register(this, CommandEnchant.build(this), "enchant");
+        commandService.register(this, CommandInvisible.build(this), "invis", "invisible", "hide");
+        
         // Instantiate managers
         essentialsGame = new EssentialsGame(game);
     }

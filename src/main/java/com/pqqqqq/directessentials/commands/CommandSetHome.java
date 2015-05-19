@@ -26,8 +26,8 @@ public class CommandSetHome implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().setExecutor(new CommandSetHome(plugin)).setDescription(Texts.of(TextColors.AQUA, "Sets a new home location."))
-                .setArguments(GenericArguments.string(Texts.of("HomeName"))).build();
+        return CommandSpec.builder().executor(new CommandSetHome(plugin)).description(Texts.of(TextColors.AQUA, "Sets a new home location."))
+                .arguments(GenericArguments.string(Texts.of("HomeName"))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
