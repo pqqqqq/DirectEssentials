@@ -56,7 +56,9 @@ public class RegistrarCMD {
         commandService.register(plugin, CommandMore.build(plugin), "more");
         commandService.register(plugin, CommandRepair.build(plugin), "repair", "fix");
         commandService.register(plugin, CommandEnchant.build(plugin), "enchant");
-        commandService.register(plugin, CommandInvisible.build(plugin), "invis", "invisible", "hide");
+        commandService.register(plugin, CommandInvisible.build(plugin), "invis", "invisible", "hide", "vanish", "v");
         commandService.register(plugin, CommandSudo.build(plugin), "sudo", "run");
+        commandService.register(plugin, CommandSpawnMob.build(plugin), "spawnmob", "mob");
+        commandService.register(plugin, CommandTop.build(plugin), "top");
     }
 }

@@ -24,12 +24,12 @@ public class CommandTPO implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandTPO(plugin)).description(Texts.of(TextColors.AQUA, "Teleports a player to another.")).permission("directessentials.tpo")
-                .arguments(GenericArguments.seq(GenericArguments.player(Texts.of("DestinationPlayer"), plugin.getGame()), GenericArguments.playerOrSource(Texts.of("TeleporterPlayer"), plugin.getGame()))).build();
+        return CommandSpec.builder().executor(new CommandTPO(plugin)).description(Texts.of(TextColors.AQUA, "Teleports one player to another.")).permission("directessentials.tpo")
+                .arguments(GenericArguments.seq(GenericArguments.player(Texts.of("DestinationPlayer"), plugin.getGame()), GenericArguments.playerOrSource(Texts.of("TeleportPlayer"), plugin.getGame()))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        Optional<Player> teleporter = arguments.<Player>getOne("TeleporterPlayer");
+        Optional<Player> teleporter = arguments.<Player>getOne("TeleportPlayer");
         Optional<Player> destination = arguments.<Player>getOne("DestinationPlayer");
 
         teleporter.get().setLocationSafely(destination.get().getLocation());

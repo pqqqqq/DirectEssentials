@@ -25,7 +25,7 @@ public class CommandRepair implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandRepair(plugin)).description(Texts.of(TextColors.AQUA, "Repairs an item.")).permission("directessentials.repair").build();
+        return CommandSpec.builder().executor(new CommandRepair(plugin)).description(Texts.of(TextColors.AQUA, "Repairs the item in hand.")).permission("directessentials.repair").build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

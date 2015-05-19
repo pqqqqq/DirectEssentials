@@ -23,7 +23,7 @@ public class CommandMotd implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandMotd(plugin)).description(Texts.of(TextColors.AQUA, "Displays the MOTD.")).permission("directessentials.motd")
+        return CommandSpec.builder().executor(new CommandMotd(plugin)).description(Texts.of(TextColors.AQUA, "Displays or changes the MOTD.")).permission("directessentials.motd")
                 .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Texts.of("MOTD")))).build();
     }
 
