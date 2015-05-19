@@ -76,7 +76,7 @@ public class CommandHelp implements CommandExecutor {
         if (page < 1) {
             src.sendMessage(Texts.of(TextColors.RED, "The page number must be greater than 0.")); // Lower bounds error
         } else if (page > paginatedList.getTotalPages()) {
-            src.sendMessage(Texts.of(TextColors.RED, "There are only ", TextColors.WHITE, paginatedList.getTotalPages(), TextColors.RED, " page(s)."));
+            src.sendMessage(Texts.of(TextColors.RED, "There are only ", TextColors.WHITE, paginatedList.getTotalPages(), TextColors.RED, " page(s).")); // Upper bounds error
         } else {
             src.sendMessage(paginatedList.getPage(page)); // Display the page
         }

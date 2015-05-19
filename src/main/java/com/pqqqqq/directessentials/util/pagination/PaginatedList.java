@@ -11,6 +11,12 @@ import org.spongepowered.api.util.command.CommandMessageFormatting;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class was created in its entirety by mmonkey. I take no credit for this work.
+ * To see the work the API, visit: https://forums.spongepowered.org/t/paginated-lists-a-library-for-plugin-developers/6964
+ *
+ * @author mmonkey
+ */
 public class PaginatedList {
 
     private List<Text> items = new ArrayList<Text>();

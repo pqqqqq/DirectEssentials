@@ -1,5 +1,11 @@
 package com.pqqqqq.directessentials.util.pagination;
 
+/**
+ * This class was created in its entirety by mmonkey. I take no credit for this work.
+ * To see the work the API, visit: https://forums.spongepowered.org/t/paginated-lists-a-library-for-plugin-developers/6964
+ *
+ * @author mmonkey
+ */
 public class PaginatedListUtil {
 
     // Line number presets
