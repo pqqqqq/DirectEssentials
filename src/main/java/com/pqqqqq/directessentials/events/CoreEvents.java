@@ -53,7 +53,7 @@ public class CoreEvents {
                 Optional<Player> otherP = other.getPlayer();
 
                 if (otherP.isPresent()) {
-                    InvisibilityData invisibilityData = otherP.get().getData(InvisibilityData.class).get();
+                    InvisibilityData invisibilityData = otherP.get().getOrCreate(InvisibilityData.class).get();
                     invisibilityData.setInvisibleTo(player, true);
                     otherP.get().offer(invisibilityData);
                 }
@@ -68,7 +68,7 @@ public class CoreEvents {
         EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
 
         if (user.isInvisible()) {
-            InvisibilityData invisibilityData = player.getData(InvisibilityData.class).get();
+            InvisibilityData invisibilityData = player.getOrCreate(InvisibilityData.class).get();
 
             for (Player online : plugin.getGame().getServer().getOnlinePlayers()) {
                 if (!online.equals(player) && invisibilityData.isInvisibleTo(online)) {

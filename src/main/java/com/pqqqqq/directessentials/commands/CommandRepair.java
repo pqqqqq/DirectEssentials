@@ -43,7 +43,7 @@ public class CommandRepair implements CommandExecutor {
         }
 
         ItemStack hnd = handOptional.get();
-        Optional<DurabilityData> durabilityDataOptional = hnd.getData(DurabilityData.class);
+        Optional<DurabilityData> durabilityDataOptional = hnd.getOrCreate(DurabilityData.class);
 
         if (durabilityDataOptional.isPresent()) {
             DurabilityData durabilityData = durabilityDataOptional.get();

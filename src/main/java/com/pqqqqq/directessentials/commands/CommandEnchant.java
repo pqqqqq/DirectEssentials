@@ -54,7 +54,7 @@ public class CommandEnchant implements CommandExecutor {
             level = args.<Integer>getOne("Level").get();
         }
 
-        Optional<EnchantmentData> enchantmentDataOptional = hnd.getData(EnchantmentData.class);
+        Optional<EnchantmentData> enchantmentDataOptional = hnd.getOrCreate(EnchantmentData.class);
         if (enchantmentDataOptional.isPresent()) {
             EnchantmentData enchantmentData = enchantmentDataOptional.get();
             enchantmentData.set(enchantment, level);

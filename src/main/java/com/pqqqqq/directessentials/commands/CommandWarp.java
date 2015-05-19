@@ -1,6 +1,5 @@
 package com.pqqqqq.directessentials.commands;
 
-import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.commands.elements.EssentialsArguments;
 import com.pqqqqq.directessentials.data.Warp;
@@ -33,11 +32,6 @@ public class CommandWarp implements CommandExecutor {
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!arguments.hasAny("WarpName")) {
             // List warps
             TextBuilder builder = Texts.builder("Available warps: ").color(TextColors.AQUA);
@@ -58,11 +52,7 @@ public class CommandWarp implements CommandExecutor {
             return CommandResult.success();
         }
 
-        Optional<Player> warper = arguments.<Player>getOne("Warper");
-        if (!warper.isPresent()) {
-            source.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
-            return CommandResult.success();
-        }
+        Player warper = arguments.<Player>getOne("Warper").get();
 
         String warpName = arguments.<String>getOne("WarpName").get();
         Warp warp = plugin.getEssentialsGame().getWarps().get(warpName);
@@ -76,15 +66,11 @@ public class CommandWarp implements CommandExecutor {
             return CommandResult.success();
         }
 
-        if (warp.apply(warper.get())) {
+        if (warp.apply(warper)) {
             source.sendMessage(Texts.of(TextColors.GREEN, "Warped successfully."));
         } else {
             source.sendMessage(Texts.of(TextColors.RED, "Could not be warped."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return true;
     }
 }

@@ -30,17 +30,13 @@ public class CommandHeal implements CommandExecutor {
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<Player> player = args.<Player>getOne("Player");
-        if (!player.isPresent()) {
-            src.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
-            return CommandResult.success();
-        }
+        Player player = args.<Player>getOne("Player").get();
+        Optional<HealthData> healthData = player.getOrCreate(HealthData.class);
 
-        Optional<HealthData> healthData = player.get().getData(HealthData.class);
         if (healthData.isPresent()) {
             HealthData hd = healthData.get();
             hd.setHealth(hd.getMaxHealth());
-            player.get().offer(hd);
+            player.offer(hd);
 
             src.sendMessage(Texts.of(TextColors.GREEN, "Health refilled."));
         }

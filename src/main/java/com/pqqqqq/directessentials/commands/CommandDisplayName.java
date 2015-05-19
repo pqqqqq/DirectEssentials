@@ -30,19 +30,14 @@ public class CommandDisplayName implements CommandExecutor {
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<Player> player = args.<Player>getOne("Player");
-        if (!player.isPresent()) {
-            src.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
-            return CommandResult.success();
-        }
-
+        Player player = args.<Player>getOne("Player").get();
         String displayName = args.<String>getOne("DisplayName").get();
 
-        Optional<DisplayNameData> displayNameData = player.get().getData(DisplayNameData.class);
+        Optional<DisplayNameData> displayNameData = player.getData(DisplayNameData.class);
         if (displayNameData.isPresent()) {
             DisplayNameData dnd = displayNameData.get();
             dnd.setDisplayName(Texts.of(displayName));
-            player.get().offer(dnd);
+            player.offer(dnd);
 
             src.sendMessage(Texts.of(TextColors.GREEN, "Display name set."));
         }

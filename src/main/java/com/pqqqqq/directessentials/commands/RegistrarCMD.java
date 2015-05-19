@@ -60,5 +60,6 @@ public class RegistrarCMD {
         commandService.register(plugin, CommandSudo.build(plugin), "sudo", "run");
         commandService.register(plugin, CommandSpawnMob.build(plugin), "spawnmob", "mob");
         commandService.register(plugin, CommandTop.build(plugin), "top");
+        commandService.register(plugin, CommandPing.build(plugin), "ping", "pong", "echo");
     }
 }

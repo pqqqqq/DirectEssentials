@@ -1,6 +1,5 @@
 package com.pqqqqq.directessentials.commands;
 
-import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
@@ -58,28 +57,24 @@ public class CommandTPAccept implements CommandExecutor {
                 source.sendMessage(requestText.build());
             }
         } else {
-            Optional<Player> accept = arguments.<Player>getOne("Player");
-            if (!accept.isPresent()) {
-                source.sendMessage(Texts.of(TextColors.RED, "This player is currently not online."));
-                return CommandResult.success();
-            }
+            Player accept = arguments.<Player>getOne("Player").get();
+            EssentialsUser acceptUser = plugin.getEssentialsGame().getOrCreateUser(accept.getUniqueId().toString());
 
-            EssentialsUser acceptUser = plugin.getEssentialsGame().getOrCreateUser(accept.get().getUniqueId().toString());
             Boolean teleportHere = user.getTpRequests().remove(acceptUser);
             if (teleportHere == null) {
-                source.sendMessage(Texts.of(TextColors.WHITE, accept.get().getName(), TextColors.AQUA, " has not requested a teleportation from you."));
+                source.sendMessage(Texts.of(TextColors.WHITE, accept.getName(), TextColors.AQUA, " has not requested a teleportation from you."));
                 return CommandResult.success();
             }
 
             acceptUser.setRequestingTeleport(false);
             if (teleportHere) {
-                player.setLocationSafely(accept.get().getLocation());
-                player.sendMessage(Texts.of(TextColors.AQUA, "You accepted the teleport request, teleported to ", TextColors.WHITE, accept.get().getName()));
-                accept.get().sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request and was teleported to you."));
+                player.setLocationSafely(accept.getLocation());
+                player.sendMessage(Texts.of(TextColors.AQUA, "You accepted the teleport request, teleported to ", TextColors.WHITE, accept.getName()));
+                accept.sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request and was teleported to you."));
             } else {
-                accept.get().setLocationSafely(player.getLocation());
-                player.sendMessage(Texts.of(TextColors.AQUA, "You accepted the teleport request and ", TextColors.WHITE, accept.get().getName(), TextColors.AQUA, " was teleported to you."));
-                accept.get().sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request, teleported to ", TextColors.WHITE, player.getName()));
+                accept.setLocationSafely(player.getLocation());
+                player.sendMessage(Texts.of(TextColors.AQUA, "You accepted the teleport request and ", TextColors.WHITE, accept.getName(), TextColors.AQUA, " was teleported to you."));
+                accept.sendMessage(Texts.of(TextColors.WHITE, player.getName(), TextColors.AQUA, " accepted your teleport request, teleported to ", TextColors.WHITE, player.getName()));
             }
         }
         return CommandResult.success();

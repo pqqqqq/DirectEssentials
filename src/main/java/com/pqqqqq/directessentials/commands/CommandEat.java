@@ -30,17 +30,13 @@ public class CommandEat implements CommandExecutor {
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        Optional<Player> player = args.<Player>getOne("Player");
-        if (!player.isPresent()) {
-            src.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
-            return CommandResult.success();
-        }
+        Player player = args.<Player>getOne("Player").get();
+        Optional<FoodData> foodData = player.getOrCreate(FoodData.class);
 
-        Optional<FoodData> foodData = player.get().getData(FoodData.class);
         if (foodData.isPresent()) {
             FoodData fd = foodData.get();
             fd.setFoodLevel(20);
-            player.get().offer(fd);
+            player.offer(fd);
 
             src.sendMessage(Texts.of(TextColors.GREEN, "Hunger refilled."));
         }

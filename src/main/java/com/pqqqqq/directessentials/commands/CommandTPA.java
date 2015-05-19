@@ -1,6 +1,5 @@
 package com.pqqqqq.directessentials.commands;
 
-import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
 import org.spongepowered.api.entity.player.Player;
@@ -42,18 +41,13 @@ public class CommandTPA implements CommandExecutor {
         final Player player = (Player) source;
         final EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
 
-        Optional<Player> request = arguments.<Player>getOne("Player");
-        if (!request.isPresent()) {
-            source.sendMessage(Texts.of(TextColors.RED, "This player is not currently online."));
-            return CommandResult.success();
-        }
-
-        if (!request.get().hasPermission("directessentials.tpaccept") && !request.get().hasPermission("directessentials.*")) {
+        Player request = arguments.<Player>getOne("Player").get();
+        if (!request.hasPermission("directessentials.tpaccept") && !request.hasPermission("directessentials.*")) {
             source.sendMessage(Texts.of(TextColors.RED, "This player cannot accept teleport requests."));
             return CommandResult.success();
         }
 
-        final EssentialsUser tpRequestUser = plugin.getEssentialsGame().getOrCreateUser(request.get().getUniqueId().toString());
+        final EssentialsUser tpRequestUser = plugin.getEssentialsGame().getOrCreateUser(request.getUniqueId().toString());
         if (tpRequestUser.isRequestingTeleport()) {
             source.sendMessage(Texts.of(TextColors.RED, "You have a pending teleportation request."));
             return CommandResult.success();
@@ -61,13 +55,13 @@ public class CommandTPA implements CommandExecutor {
 
         user.setRequestingTeleport(true);
         tpRequestUser.getTpRequests().put(user, false);
-        player.sendMessage(Texts.of(TextColors.AQUA, "Successfully requested a teleport from ", TextColors.WHITE, request.get().getName()));
+        player.sendMessage(Texts.of(TextColors.AQUA, "Successfully requested a teleport from ", TextColors.WHITE, request.getName()));
 
         TextBuilder requestText = Texts.builder().onClick(TextActions.runCommand("/tpaccept " + player.getName())).onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Accept this teleport request.")));
         requestText.append(Texts.of(TextColors.WHITE, player.getName()));
         requestText.append(Texts.of(TextColors.AQUA, " has requested a teleport to you."));
 
-        request.get().sendMessage(requestText.build());
+        request.sendMessage(requestText.build());
 
         // Start a timeout schedule
         // TODO: Change to a sync scheduler when fixed, but async is fine for now.

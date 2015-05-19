@@ -37,7 +37,7 @@ public class CommandInvisible implements CommandExecutor {
         Player player = (Player) src;
         EssentialsUser user = plugin.getEssentialsGame().getOrCreateUser(player.getUniqueId().toString());
 
-        Optional<InvisibilityData> invisibilityDataOptional = player.getData(InvisibilityData.class);
+        Optional<InvisibilityData> invisibilityDataOptional = player.getOrCreate(InvisibilityData.class);
         if (invisibilityDataOptional.isPresent()) {
             InvisibilityData invisibilityData = invisibilityDataOptional.get();
 
