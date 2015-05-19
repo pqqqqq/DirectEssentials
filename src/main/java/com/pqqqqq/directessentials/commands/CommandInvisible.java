@@ -57,7 +57,7 @@ public class CommandInvisible implements CommandExecutor {
                 user.setInvisible(false);
             } else {
                 for (Player online : plugin.getGame().getServer().getOnlinePlayers()) {
-                    if (!online.equals(player)/* && !online.hasPermission("directessentials.invisible.override")*/) {
+                    if (!online.equals(player) && !online.hasPermission("directessentials.invisible.override")) {
                         invisibilityData.setInvisibleTo(online, true);
                     }
                 }

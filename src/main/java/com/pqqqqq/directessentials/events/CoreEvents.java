@@ -44,9 +44,9 @@ public class CoreEvents {
         }
 
         // Make players who are invisble invisble to the player
-        /*if (player.hasPermission("directessentials.invisible.override")) {
+        if (player.hasPermission("directessentials.invisible.override")) {
             return;
-        }*/
+        }
 
         for (EssentialsUser other : plugin.getEssentialsGame().getUsers().values()) {
             if (!other.equals(user) && other.isInvisible()) {

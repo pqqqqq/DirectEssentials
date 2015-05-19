@@ -1,9 +1,7 @@
 package com.pqqqqq.directessentials;
 
 import com.google.inject.Inject;
-import com.pqqqqq.directessentials.commands.*;
-import com.pqqqqq.directessentials.commands.essentials.CommandEssentials;
-import com.pqqqqq.directessentials.commands.region.CommandRegion;
+import com.pqqqqq.directessentials.commands.RegistrarCMD;
 import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.config.DataConfig;
 import com.pqqqqq.directessentials.events.CoreEvents;
@@ -18,7 +16,6 @@ import org.spongepowered.api.event.state.InitializationEvent;
 import org.spongepowered.api.event.state.ServerStartedEvent;
 import org.spongepowered.api.event.state.ServerStoppingEvent;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.service.command.CommandService;
 import org.spongepowered.api.service.config.DefaultConfig;
 import org.spongepowered.api.service.event.EventManager;
 
@@ -32,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class DirectEssentials {
     public static final String ID = "directessentials";
     public static final String NAME = "DirectEssentials";
-    public static final String VERSION = "0.1 BETA";
+    public static final String VERSION = "0.2 BETA";
 
     private Game game;
 
@@ -69,44 +66,7 @@ public class DirectEssentials {
         eventManager.register(this, new ProtectionEvents(this));
 
         // Register commands
-        CommandService commandService = game.getCommandDispatcher();
-
-        // Warp commands
-        commandService.register(this, CommandWarp.build(this), "warp");
-        commandService.register(this, CommandSetWarp.build(this), "setwarp", "swarp");
-        commandService.register(this, CommandDeleteWarp.build(this), "deletewarp", "dwarp", "removewarp", "delwarp");
-
-        // Home commands
-        commandService.register(this, CommandHome.build(this), "home");
-        commandService.register(this, CommandSetHome.build(this), "sethome", "shome");
-        commandService.register(this, CommandDeleteHome.build(this), "deletehome", "dhome", "removehome", "delhome");
-
-        // Spawn commands
-        commandService.register(this, CommandSpawn.build(this), "spawn");
-        commandService.register(this, CommandSetSpawn.build(this), "setspawn");
-
-        // Teleport commands
-        commandService.register(this, CommandTPA.build(this), "tpa");
-        commandService.register(this, CommandTPAccept.build(this), "tpaccept");
-        commandService.register(this, CommandTPAHere.build(this), "tpahere");
-        commandService.register(this, CommandTPO.build(this), "tpo", "tp", "teleport", "tele");
-
-        // Region commands
-        commandService.register(this, CommandRegion.build(this), "region", "rg");
-
-        // Essentials main plugin commands
-        commandService.register(this, CommandEssentials.build(this), "essentials", "ess", "de", "directessentials", "dessentials", "dess");
-
-        // Miscellaneous commands
-        commandService.register(this, CommandMotd.build(this), "motd");
-        commandService.register(this, CommandHat.build(this), "hat", "head");
-        commandService.register(this, CommandHeal.build(this), "heal");
-        commandService.register(this, CommandEat.build(this), "feed", "eat");
-        commandService.register(this, CommandDisplayName.build(this), "displayname", "display", "dn");
-        commandService.register(this, CommandMore.build(this), "more");
-        commandService.register(this, CommandRepair.build(this), "repair", "fix");
-        commandService.register(this, CommandEnchant.build(this), "enchant");
-        commandService.register(this, CommandInvisible.build(this), "invis", "invisible", "hide");
+        new RegistrarCMD(this).register();
         
         // Instantiate managers
         essentialsGame = new EssentialsGame(game);
