@@ -78,7 +78,15 @@ public class CommandHelp implements CommandExecutor {
         } else if (page > paginatedList.getTotalPages()) {
             src.sendMessage(Texts.of(TextColors.RED, "There are only ", TextColors.WHITE, paginatedList.getTotalPages(), TextColors.RED, " page(s).")); // Upper bounds error
         } else {
-            src.sendMessage(paginatedList.getPage(page)); // Display the page
+            TextBuilder builder = Texts.builder();
+
+            // Clear the current chat
+            for (int i = 0; i < 20; i++) {
+                builder.append(CommandMessageFormatting.NEWLINE_TEXT);
+            }
+
+            builder.append(paginatedList.getPage(page)); // Append the page
+            src.sendMessage(builder.build()); // Build and send the message
         }
         return CommandResult.success();
     }
