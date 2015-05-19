@@ -52,10 +52,11 @@ public class RegistrarCMD {
         commandService.register(plugin, CommandHat.build(plugin), "hat", "head");
         commandService.register(plugin, CommandHeal.build(plugin), "heal");
         commandService.register(plugin, CommandEat.build(plugin), "feed", "eat");
-        commandService.register(plugin, CommandDisplayName.build(plugin), "displayname", "display", "dn");
+        commandService.register(plugin, CommandDisplayName.build(plugin), "displayname", "display", "dn", "nick", "nickname");
         commandService.register(plugin, CommandMore.build(plugin), "more");
         commandService.register(plugin, CommandRepair.build(plugin), "repair", "fix");
         commandService.register(plugin, CommandEnchant.build(plugin), "enchant");
         commandService.register(plugin, CommandInvisible.build(plugin), "invis", "invisible", "hide");
+        commandService.register(plugin, CommandSudo.build(plugin), "sudo", "run");
     }
 }

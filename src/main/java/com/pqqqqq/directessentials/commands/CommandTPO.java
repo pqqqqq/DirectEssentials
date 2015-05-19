@@ -37,16 +37,6 @@ public class CommandTPO implements CommandExecutor {
         Optional<Player> teleporter = arguments.<Player>getOne("TeleporterPlayer");
         Optional<Player> destination = arguments.<Player>getOne("DestinationPlayer");
 
-        if (!teleporter.isPresent()) {
-            source.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
-            return CommandResult.success();
-        }
-
-        if (!destination.isPresent()) {
-            source.sendMessage(Texts.of(TextColors.RED, "This player is not currently online."));
-            return CommandResult.success();
-        }
-
         teleporter.get().setLocationSafely(destination.get().getLocation());
         teleporter.get().sendMessage(Texts.of(TextColors.AQUA, "You have been teleported to: ", TextColors.WHITE, destination.get().getName()));
         if (!teleporter.equals(source)) {
