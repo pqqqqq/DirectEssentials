@@ -44,7 +44,7 @@ public class CommandWarp implements CommandExecutor {
             int num = 0;
 
             for (Warp warp : plugin.getEssentialsGame().getWarps()) {
-                if (source.hasPermission("directessentials.warp." + warp.getName()) || source.hasPermission("directessentials.warp.*") || source.hasPermission("directessentials.*")) {
+                if (source.hasPermission("directessentials.warp." + warp.getName()) || source.hasPermission("directessentials.warp.*")) {
                     builder.append(Texts.builder((num++ > 0 ? ", " : "") + warp.getName()).color(TextColors.WHITE).onClick(TextActions.runCommand("/warp " + warp.getName()))
                             .onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Warp here."))).build());
                 }
@@ -71,7 +71,7 @@ public class CommandWarp implements CommandExecutor {
             return CommandResult.success();
         }
 
-        if (!source.hasPermission("directessentials.warp." + warp.getName()) && !source.hasPermission("directessentials.warp.*") && !source.hasPermission("directessentials.*")) {
+        if (!source.hasPermission("directessentials.warp." + warp.getName()) && !source.hasPermission("directessentials.warp.*")) {
             source.sendMessage(Texts.of(TextColors.RED, "You don't have permissions for this warp."));
             return CommandResult.success();
         }

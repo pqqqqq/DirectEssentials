@@ -24,16 +24,11 @@ public class CommandTPO implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandTPO(plugin)).description(Texts.of(TextColors.AQUA, "Teleports a player to another."))
+        return CommandSpec.builder().executor(new CommandTPO(plugin)).description(Texts.of(TextColors.AQUA, "Teleports a player to another.")).permission("directessentials.tpo")
                 .arguments(GenericArguments.seq(GenericArguments.player(Texts.of("DestinationPlayer"), plugin.getGame()), GenericArguments.playerOrSource(Texts.of("TeleporterPlayer"), plugin.getGame()))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         Optional<Player> teleporter = arguments.<Player>getOne("TeleporterPlayer");
         Optional<Player> destination = arguments.<Player>getOne("DestinationPlayer");
 
@@ -43,9 +38,5 @@ public class CommandTPO implements CommandExecutor {
             source.sendMessage(Texts.of(TextColors.AQUA, "Teleport successful."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.tpo") || source.hasPermission("directessentials.*");
     }
 }

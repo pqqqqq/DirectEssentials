@@ -29,16 +29,11 @@ public class CommandTPAccept implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandTPAccept(plugin)).description(Texts.of(TextColors.AQUA, "Accept an incoming TP request"))
+        return CommandSpec.builder().executor(new CommandTPAccept(plugin)).description(Texts.of(TextColors.AQUA, "Accept an incoming TP request")).permission("directessentials.tpaccept")
                 .arguments(GenericArguments.optional(GenericArguments.player(Texts.of("Player"), plugin.getGame()))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -88,9 +83,5 @@ public class CommandTPAccept implements CommandExecutor {
             }
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.tpaccept") || source.hasPermission("directessentials.*");
     }
 }

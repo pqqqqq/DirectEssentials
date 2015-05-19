@@ -29,16 +29,11 @@ public class CommandTPA implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandTPA(plugin)).description(Texts.of(TextColors.AQUA, "Requests a teleport from a player."))
+        return CommandSpec.builder().executor(new CommandTPA(plugin)).description(Texts.of(TextColors.AQUA, "Requests a teleport from a player.")).permission("directessentials.tpa")
                 .arguments(GenericArguments.player(Texts.of("Player"), plugin.getGame())).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -94,9 +89,5 @@ public class CommandTPA implements CommandExecutor {
             }
         }, 200);*/
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.tpa") || source.hasPermission("directessentials.*");
     }
 }

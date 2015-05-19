@@ -22,15 +22,10 @@ public class CommandSetSpawn implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandSetSpawn(plugin)).description(Texts.of(TextColors.AQUA, "Set the server spawn.")).build();
+        return CommandSpec.builder().executor(new CommandSetSpawn(plugin)).description(Texts.of(TextColors.AQUA, "Set the server spawn.")).permission("directessentials.setspawn").build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -41,9 +36,5 @@ public class CommandSetSpawn implements CommandExecutor {
 
         source.sendMessage(Texts.of(TextColors.GREEN, "Spawn set successfully."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.setspawn") || source.hasPermission("directessentials.*");
     }
 }

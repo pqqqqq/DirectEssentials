@@ -28,16 +28,11 @@ public class CommandEnchant implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandEnchant(plugin)).description(Texts.of(TextColors.AQUA, "Enchants the item in hand."))
+        return CommandSpec.builder().executor(new CommandEnchant(plugin)).description(Texts.of(TextColors.AQUA, "Enchants the item in hand.")).permission("directessentials.enchant")
                 .arguments(GenericArguments.catalogedElement(Texts.of("Enchantment"), plugin.getGame(), CatalogTypes.ENCHANTMENT), GenericArguments.optional(GenericArguments.integer(Texts.of("Level")))).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(src instanceof Player)) {
             src.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -67,9 +62,5 @@ public class CommandEnchant implements CommandExecutor {
             player.sendMessage(Texts.of(TextColors.GREEN, "Enchantment applied successfully."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.enchant");
     }
 }

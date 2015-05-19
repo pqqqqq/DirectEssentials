@@ -22,16 +22,11 @@ public class CommandDeleteWarp implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandDeleteWarp(plugin)).description(Texts.of(TextColors.AQUA, "Deletes a player warp."))
+        return CommandSpec.builder().executor(new CommandDeleteWarp(plugin)).description(Texts.of(TextColors.AQUA, "Deletes a player warp.")).permission("directessentials.deletewarp")
                 .arguments(EssentialsArguments.warp(Texts.of("WarpName"), plugin)).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (plugin.getEssentialsGame().getWarps().remove(arguments.<String>getOne("WarpName").get()) == null) {
             source.sendMessage(Texts.of(TextColors.RED, "There is no warp with this name."));
             return CommandResult.success();
@@ -39,9 +34,5 @@ public class CommandDeleteWarp implements CommandExecutor {
 
         source.sendMessage(Texts.of(TextColors.GREEN, "Warp deleted successfully."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.deletewarp") || source.hasPermission("directessentials.*");
     }
 }

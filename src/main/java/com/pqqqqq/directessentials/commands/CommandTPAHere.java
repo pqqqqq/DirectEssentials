@@ -29,16 +29,11 @@ public class CommandTPAHere implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandTPAHere(plugin)).description(Texts.of(TextColors.AQUA, "Request that a player teleports to you."))
+        return CommandSpec.builder().executor(new CommandTPAHere(plugin)).description(Texts.of(TextColors.AQUA, "Request that a player teleports to you.")).permission("directessentials.tpahere")
                 .arguments(GenericArguments.player(Texts.of("Player"), plugin.getGame())).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -94,9 +89,5 @@ public class CommandTPAHere implements CommandExecutor {
             }
         }, 200);*/
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.tpahere") || source.hasPermission("directessentials.*");
     }
 }

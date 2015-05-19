@@ -24,16 +24,11 @@ public class CommandDeleteHome implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandDeleteHome(plugin)).description(Texts.of(TextColors.AQUA, "Deletes a player's home."))
+        return CommandSpec.builder().executor(new CommandDeleteHome(plugin)).description(Texts.of(TextColors.AQUA, "Deletes a player's home.")).permission("directessentials.deletehome")
                 .arguments(EssentialsArguments.home(Texts.of("HomeName"), plugin)).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -49,9 +44,5 @@ public class CommandDeleteHome implements CommandExecutor {
 
         source.sendMessage(Texts.of(TextColors.GREEN, "Home deleted successfully."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.home") || source.hasPermission("directessentials.*");
     }
 }

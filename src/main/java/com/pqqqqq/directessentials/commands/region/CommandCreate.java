@@ -26,16 +26,11 @@ public class CommandCreate implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandCreate(plugin)).description(Texts.of(TextColors.AQUA, "Creates a new region"))
+        return CommandSpec.builder().executor(new CommandCreate(plugin)).description(Texts.of(TextColors.AQUA, "Creates a new region")).permission("directessentials.region.create")
                 .arguments(GenericArguments.string(Texts.of("RegionName"))).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(src instanceof Player)) {
             src.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -60,9 +55,5 @@ public class CommandCreate implements CommandExecutor {
         plugin.getEssentialsGame().getRegions().put(regionName, newRegion);
         src.sendMessage(Texts.of(TextColors.GREEN, "Region created successfully."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.region.create");
     }
 }

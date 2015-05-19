@@ -24,15 +24,10 @@ public class CommandHat implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandHat(plugin)).description(Texts.of(TextColors.AQUA, "A wardrobe change")).build();
+        return CommandSpec.builder().executor(new CommandHat(plugin)).description(Texts.of(TextColors.AQUA, "A wardrobe change")).permission("directessentials.hat").build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(src instanceof Player)) {
             src.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -49,9 +44,5 @@ public class CommandHat implements CommandExecutor {
         player.setHelmet(hand.get());
         player.sendMessage(Texts.of(TextColors.GREEN, "You've prepared for war with your ", TextColors.WHITE, hand.get().getItem().getName(), TextColors.GREEN, " hat."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.hat");
     }
 }

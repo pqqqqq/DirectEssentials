@@ -21,21 +21,12 @@ public class CommandReload implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandReload(plugin)).description(Texts.of(TextColors.AQUA, "Reloads the main config.")).build();
+        return CommandSpec.builder().executor(new CommandReload(plugin)).description(Texts.of(TextColors.AQUA, "Reloads the main config.")).permission("directessentials.reload").build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         plugin.getConfig().load();
         source.sendMessage(Texts.of(TextColors.GREEN, "Config reloaded."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.reload") || source.hasPermission("directessentials.*");
     }
 }

@@ -25,16 +25,11 @@ public class CommandHeal implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandHeal(plugin)).description(Texts.of(TextColors.AQUA, "Nurtures a player back to full health."))
+        return CommandSpec.builder().executor(new CommandHeal(plugin)).description(Texts.of(TextColors.AQUA, "Nurtures a player back to full health.")).permission("directessentials.heal")
                 .arguments(GenericArguments.playerOrSource(Texts.of("Player"), plugin.getGame())).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         Optional<Player> player = args.<Player>getOne("Player");
         if (!player.isPresent()) {
             src.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
@@ -50,9 +45,5 @@ public class CommandHeal implements CommandExecutor {
             src.sendMessage(Texts.of(TextColors.GREEN, "Health refilled."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.heal");
     }
 }

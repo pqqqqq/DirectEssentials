@@ -24,16 +24,11 @@ public class CommandSetWarp implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandSetWarp(plugin)).description(Texts.of(TextColors.AQUA, "Sets a new server warp."))
+        return CommandSpec.builder().executor(new CommandSetWarp(plugin)).description(Texts.of(TextColors.AQUA, "Sets a new server warp.")).permission("directessentials.setwarp")
                 .arguments(GenericArguments.string(Texts.of("WarpName"))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -53,9 +48,5 @@ public class CommandSetWarp implements CommandExecutor {
 
         source.sendMessage(Texts.of(TextColors.GREEN, "Warp created successfully."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.setwarp") || source.hasPermission("directessentials.*");
     }
 }

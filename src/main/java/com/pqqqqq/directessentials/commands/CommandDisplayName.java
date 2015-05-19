@@ -25,16 +25,11 @@ public class CommandDisplayName implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandDisplayName(plugin)).description(Texts.of(TextColors.AQUA, "Changes a player's display name."))
+        return CommandSpec.builder().executor(new CommandDisplayName(plugin)).description(Texts.of(TextColors.AQUA, "Changes a player's display name.")).permission("directessentials.displayname")
                 .arguments(GenericArguments.string(Texts.of("DisplayName")), GenericArguments.playerOrSource(Texts.of("Player"), plugin.getGame())).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         Optional<Player> player = args.<Player>getOne("Player");
         if (!player.isPresent()) {
             src.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
@@ -52,9 +47,5 @@ public class CommandDisplayName implements CommandExecutor {
             src.sendMessage(Texts.of(TextColors.GREEN, "Display name set."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.displayname");
     }
 }

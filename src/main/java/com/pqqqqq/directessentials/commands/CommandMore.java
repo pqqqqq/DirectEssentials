@@ -24,15 +24,10 @@ public class CommandMore implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandMore(plugin)).description(Texts.of(TextColors.AQUA, "Gets more of an item.")).build();
+        return CommandSpec.builder().executor(new CommandMore(plugin)).description(Texts.of(TextColors.AQUA, "Gets more of an item.")).permission("directessentials.more").build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(src instanceof Player)) {
             src.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -55,9 +50,5 @@ public class CommandMore implements CommandExecutor {
 
         player.sendMessage(Texts.of(TextColors.GREEN, "More ", TextColors.WHITE, hnd.getItem().getName(), TextColors.GREEN, " coming right up."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.more");
     }
 }

@@ -25,15 +25,10 @@ public class CommandInvisible implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandInvisible(plugin)).description(Texts.of(TextColors.AQUA, "Goes invisible to some players.")).build();
+        return CommandSpec.builder().executor(new CommandInvisible(plugin)).description(Texts.of(TextColors.AQUA, "Goes invisible to some players.")).permission("directessentials.invisible").build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(src instanceof Player)) {
             src.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -69,9 +64,5 @@ public class CommandInvisible implements CommandExecutor {
             player.offer(invisibilityData);
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.invisible");
     }
 }

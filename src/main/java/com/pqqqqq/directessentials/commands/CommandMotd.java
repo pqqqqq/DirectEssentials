@@ -23,16 +23,11 @@ public class CommandMotd implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandMotd(plugin)).description(Texts.of(TextColors.AQUA, "Displays the MOTD."))
+        return CommandSpec.builder().executor(new CommandMotd(plugin)).description(Texts.of(TextColors.AQUA, "Displays the MOTD.")).permission("directessentials.motd")
                 .arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Texts.of("MOTD")))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!arguments.hasAny("MOTD")) {
             String motd = plugin.getEssentialsGame().getMotd();
             if (motd == null) {
@@ -51,9 +46,5 @@ public class CommandMotd implements CommandExecutor {
             source.sendMessage(Texts.of(TextColors.GREEN, "New MOTD has been set."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.motd") || source.hasPermission("directessentials.*");
     }
 }

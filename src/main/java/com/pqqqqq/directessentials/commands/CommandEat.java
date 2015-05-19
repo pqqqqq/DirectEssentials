@@ -25,16 +25,11 @@ public class CommandEat implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandEat(plugin)).description(Texts.of(TextColors.AQUA, "Satisfies hunger."))
+        return CommandSpec.builder().executor(new CommandEat(plugin)).description(Texts.of(TextColors.AQUA, "Satisfies hunger.")).permission("directessentials.eat")
                 .arguments(GenericArguments.playerOrSource(Texts.of("Player"), plugin.getGame())).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         Optional<Player> player = args.<Player>getOne("Player");
         if (!player.isPresent()) {
             src.sendMessage(Texts.of(TextColors.RED, "Specify an online player or run as a player."));
@@ -50,9 +45,5 @@ public class CommandEat implements CommandExecutor {
             src.sendMessage(Texts.of(TextColors.GREEN, "Hunger refilled."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.eat");
     }
 }

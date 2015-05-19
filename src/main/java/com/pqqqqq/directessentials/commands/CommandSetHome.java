@@ -26,16 +26,11 @@ public class CommandSetHome implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandSetHome(plugin)).description(Texts.of(TextColors.AQUA, "Sets a new home location."))
+        return CommandSpec.builder().executor(new CommandSetHome(plugin)).description(Texts.of(TextColors.AQUA, "Sets a new home location.")).permission("directessentials.sethome")
                 .arguments(GenericArguments.string(Texts.of("HomeName"))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -66,9 +61,5 @@ public class CommandSetHome implements CommandExecutor {
 
         source.sendMessage(Texts.of(TextColors.GREEN, "Home created successfully."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.home") || source.hasPermission("directessentials.*");
     }
 }

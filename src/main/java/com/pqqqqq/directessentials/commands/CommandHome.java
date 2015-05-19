@@ -28,16 +28,11 @@ public class CommandHome implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandHome(plugin)).description(Texts.of(TextColors.AQUA, "Teleports to a home."))
+        return CommandSpec.builder().executor(new CommandHome(plugin)).description(Texts.of(TextColors.AQUA, "Teleports to a home.")).permission("directessentials.home")
                 .arguments(GenericArguments.optional(EssentialsArguments.home(Texts.of("HomeName"), plugin))).build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(source instanceof Player)) {
             source.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -78,9 +73,5 @@ public class CommandHome implements CommandExecutor {
             source.sendMessage(Texts.of(TextColors.RED, "Could not be teleported home."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.home") || source.hasPermission("directessentials.*");
     }
 }

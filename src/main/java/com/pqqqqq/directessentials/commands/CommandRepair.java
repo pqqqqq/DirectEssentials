@@ -25,15 +25,10 @@ public class CommandRepair implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandRepair(plugin)).description(Texts.of(TextColors.AQUA, "Repairs an item.")).build();
+        return CommandSpec.builder().executor(new CommandRepair(plugin)).description(Texts.of(TextColors.AQUA, "Repairs an item.")).permission("directessentials.repair").build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        if (!testPermission(src)) {
-            src.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         if (!(src instanceof Player)) {
             src.sendMessage(Texts.of(TextColors.RED, "Player only command."));
             return CommandResult.success();
@@ -58,9 +53,5 @@ public class CommandRepair implements CommandExecutor {
             player.sendMessage(Texts.of(TextColors.GREEN, "Item repaired successfully."));
         }
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource src) {
-        return src.hasPermission("directessentials.repair");
     }
 }

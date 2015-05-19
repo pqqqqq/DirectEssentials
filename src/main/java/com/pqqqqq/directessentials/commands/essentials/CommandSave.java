@@ -21,21 +21,12 @@ public class CommandSave implements CommandExecutor {
     }
 
     public static CommandSpec build(DirectEssentials plugin) {
-        return CommandSpec.builder().executor(new CommandSave(plugin)).description(Texts.of(TextColors.AQUA, "Saves the current data.")).build();
+        return CommandSpec.builder().executor(new CommandSave(plugin)).description(Texts.of(TextColors.AQUA, "Saves the current data.")).permission("directessentials.save").build();
     }
 
     public CommandResult execute(CommandSource source, CommandContext arguments) throws CommandException {
-        if (!testPermission(source)) {
-            source.sendMessage(Texts.of(TextColors.RED, "Insufficient permissions."));
-            return CommandResult.success();
-        }
-
         plugin.getDataConfig().save();
         source.sendMessage(Texts.of(TextColors.GREEN, "Data saved."));
         return CommandResult.success();
-    }
-
-    public boolean testPermission(CommandSource source) {
-        return source.hasPermission("directessentials.save") || source.hasPermission("directessentials.*");
     }
 }
