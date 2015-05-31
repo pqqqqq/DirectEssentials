@@ -58,7 +58,7 @@ public class CommandHelp implements CommandExecutor {
 
     public static CommandSpec build(DirectEssentials plugin) {
         return CommandSpec.builder().executor(new CommandHelp(plugin)).description(Texts.of(TextColors.AQUA, "A list of commands for this plugin."))
-                .arguments(GenericArguments.optional(GenericArguments.integer(Texts.of("Page")))).build();
+                .arguments(GenericArguments.optional(GenericArguments.integer(Texts.of("Page")), 1)).build();
     }
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -76,11 +76,7 @@ public class CommandHelp implements CommandExecutor {
             }
         }
 
-        // Pages
-        int page = 1;
-        if (args.hasAny("Page")) {
-            page = args.<Integer>getOne("Page").get();
-        }
+        int page = args.<Integer>getOne("Page").get();
 
         // Checks bounds of pages
         if (page < 1) {

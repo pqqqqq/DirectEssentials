@@ -22,11 +22,12 @@ public class CommandEssentials implements CommandExecutor {
 
     public static CommandSpec build(DirectEssentials plugin) {
         return CommandSpec.builder().executor(new CommandEssentials(plugin)).description(Texts.of(TextColors.AQUA, "Essentials main plugin command"))
-                .child(CommandReload.build(plugin), "reload").child(CommandSave.build(plugin), "save").child(CommandHelp.build(plugin), "help").build();
+                .child(CommandReload.build(plugin), "reload").child(CommandSave.build(plugin), "save").child(CommandHelp.build(plugin), "help")
+                .child(CommandCmdInfo.build(plugin), "cmdinfo", "ci", "commandinfo", "cmdi").build();
     }
 
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
-        commandSource.sendMessage(Texts.of(TextColors.RED, "/ess <reload|save|help>"));
+        commandSource.sendMessage(Texts.of(TextColors.RED, "/ess <reload|save|help|cmdinfo>"));
         return CommandResult.success();
     }
 }
