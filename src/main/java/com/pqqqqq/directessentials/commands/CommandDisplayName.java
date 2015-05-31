@@ -2,7 +2,7 @@ package com.pqqqqq.directessentials.commands;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
-import org.spongepowered.api.data.manipulators.DisplayNameData;
+import org.spongepowered.api.data.manipulator.DisplayNameData;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
@@ -33,11 +33,10 @@ public class CommandDisplayName implements CommandExecutor {
         Player player = args.<Player>getOne("Player").get();
         String displayName = args.<String>getOne("DisplayName").get();
 
-        Optional<DisplayNameData> displayNameData = player.getData(DisplayNameData.class);
+        Optional<DisplayNameData> displayNameData = player.getOrCreate(DisplayNameData.class);
         if (displayNameData.isPresent()) {
             DisplayNameData dnd = displayNameData.get();
-            dnd.setDisplayName(Texts.of(displayName));
-            player.offer(dnd);
+            player.offer(dnd.setDisplayName(Texts.of(displayName)));
 
             src.sendMessage(Texts.of(TextColors.GREEN, "Display name set."));
         }

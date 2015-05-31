@@ -16,6 +16,9 @@ import org.spongepowered.api.util.command.spec.CommandSpec;
 public class CommandPing implements CommandExecutor {
     private DirectEssentials plugin;
 
+    // Some fun stuff
+    private int pongCounter = 0;
+
     private CommandPing(DirectEssentials plugin) {
         this.plugin = plugin;
     }
@@ -26,6 +29,11 @@ public class CommandPing implements CommandExecutor {
 
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         src.sendMessage(Texts.of(TextColors.GREEN, "Pong!"));
-        return CommandResult.success();
+
+        if (++pongCounter % 100 == 0) { // My little pong easter egg
+            src.sendMessage(Texts.of(TextColors.GREEN, "You are the ", TextColors.WHITE, pongCounter, "th ", TextColors.GREEN, "ponger!"));
+        }
+
+        return CommandResult.builder().successCount(pongCounter).build();
     }
 }

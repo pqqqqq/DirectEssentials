@@ -49,7 +49,12 @@ public class CommandTPAHere implements CommandExecutor {
 
         final EssentialsUser tpRequestUser = plugin.getEssentialsGame().getOrCreateUser(request.getUniqueId().toString());
         if (tpRequestUser.isRequestingTeleport()) {
-            source.sendMessage(Texts.of(TextColors.RED, "You have a pending teleportation request."));
+            source.sendMessage(Texts.of(TextColors.RED, "This player has a pending teleportation request."));
+            return CommandResult.success();
+        }
+
+        if (tpRequestUser.isTeleportingDisabled()) {
+            source.sendMessage(Texts.of(TextColors.RED, "This user has teleporting disabled."));
             return CommandResult.success();
         }
 

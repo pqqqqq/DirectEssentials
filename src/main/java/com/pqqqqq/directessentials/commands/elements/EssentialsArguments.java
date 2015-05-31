@@ -20,4 +20,8 @@ public class EssentialsArguments {
     public static CommandElement region(Text key, DirectEssentials plugin) {
         return new RegionElement(key, plugin);
     }
+
+    public static CommandElement user(Text key, DirectEssentials plugin) {
+        return new EssentialsUserElement(key, plugin);
+    }
 }

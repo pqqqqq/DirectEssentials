@@ -5,7 +5,7 @@ import com.pqqqqq.directessentials.DirectEssentials;
 import com.pqqqqq.directessentials.commands.config.EventCommand;
 import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.wrappers.user.EssentialsUser;
-import org.spongepowered.api.data.manipulators.entities.InvisibilityData;
+import org.spongepowered.api.data.manipulator.entity.InvisibilityData;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.Subscribe;

@@ -33,6 +33,10 @@ public class RegionElement extends PatternMatchingCommandElement {
 
     @Override
     protected Object getValue(String choice) throws IllegalArgumentException {
-        return choice; // This element is strictly for completion.
+        Region region = plugin.getEssentialsGame().getRegions().get(choice);
+        if (region == null) {
+            throw new IllegalArgumentException("Provided argument " + choice + " did not match a Region");
+        }
+        return region;
     }
 }

@@ -9,10 +9,10 @@ import org.spongepowered.api.service.command.CommandService;
  * Created by Kevin on 2015-05-18.
  * The class that registers all commands.
  */
-public class RegistrarCMD {
+public class CMDRegistrar {
     private DirectEssentials plugin;
 
-    public RegistrarCMD(DirectEssentials plugin) {
+    public CMDRegistrar(DirectEssentials plugin) {
         this.plugin = plugin;
     }
 
@@ -40,6 +40,7 @@ public class RegistrarCMD {
         commandService.register(plugin, CommandTPAccept.build(plugin), "tpaccept");
         commandService.register(plugin, CommandTPAHere.build(plugin), "tpahere");
         commandService.register(plugin, CommandTPO.build(plugin), "tpo", "tp", "teleport", "tele");
+        commandService.register(plugin, CommandTPToggle.build(plugin), "tptoggle");
 
         // Region commands
         commandService.register(plugin, CommandRegion.build(plugin), "region", "rg");
@@ -61,5 +62,6 @@ public class RegistrarCMD {
         commandService.register(plugin, CommandSpawnMob.build(plugin), "spawnmob", "mob");
         commandService.register(plugin, CommandTop.build(plugin), "top");
         commandService.register(plugin, CommandPing.build(plugin), "ping", "pong", "echo");
+        commandService.register(plugin, CommandWhois.build(plugin), "whois");
     }
 }

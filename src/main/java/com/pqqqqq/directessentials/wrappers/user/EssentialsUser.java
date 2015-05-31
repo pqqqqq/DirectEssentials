@@ -10,7 +10,9 @@ import com.pqqqqq.directessentials.wrappers.interfaces.ISaveable;
 import com.pqqqqq.directessentials.wrappers.interfaces.IWeakValue;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.Text;
 
+import java.net.InetSocketAddress;
 import java.util.*;
 
 /**
@@ -25,8 +27,10 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     // Cache stuff
     private Optional<Player> cachedPlayer = Optional.<Player> absent();
     private String lastCachedUsername = null;
+    private InetSocketAddress lastCachedIP = null;
 
     private boolean requestingTeleport = false;
+    private boolean teleportingDisabled = false;
     private final Map<EssentialsUser, Boolean> tpRequests = new HashMap<EssentialsUser, Boolean>(); // True means teleport here
 
     private final Set<EventCommand> commandDelay = new HashSet<EventCommand>();
@@ -44,6 +48,13 @@ public class EssentialsUser implements IWeakValue, ISaveable {
             EssentialsUser userObj = new EssentialsUser(user.getKey().toString());
 
             userObj.setLastCachedUsername(user.getNode("username").getString(null)); // Load username
+
+            // Load IP address
+            String address = user.getNode("IP").getString(null);
+            if (address != null) {
+                String[] split = address.split(":");
+                userObj.setLastCachedIP(InetSocketAddress.createUnresolved(split[0], Integer.parseInt(split[1])));
+            }
             userObj.getHomes().putAll(Home.loadHomes(user, userObj)); // Load homes
 
             users.put(user.getKey().toString(), userObj);
@@ -70,15 +81,27 @@ public class EssentialsUser implements IWeakValue, ISaveable {
     public Optional<Player> getPlayer() {
         if (this.cachedPlayer.isPresent() && this.cachedPlayer.get().isLoaded() && !this.cachedPlayer.get().isRemoved()) {
             this.lastCachedUsername = cachedPlayer.get().getName();
+            this.lastCachedIP = cachedPlayer.get().getConnection().getAddress();
             return cachedPlayer;
         }
 
         Optional<Player> player = DirectEssentials.plugin.getGame().getServer().getPlayer(UUID.fromString(this.uuid));
         if (player.isPresent()) {
             this.lastCachedUsername = player.get().getName();
+            this.lastCachedIP = player.get().getConnection().getAddress();
         }
 
         return (this.cachedPlayer = player);
+    }
+
+    public boolean sendMessage(Text... message) {
+        Optional<Player> playerOptional = getPlayer();
+        if (playerOptional.isPresent()) {
+            playerOptional.get().sendMessage(message);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -95,6 +118,18 @@ public class EssentialsUser implements IWeakValue, ISaveable {
      */
     public void setLastCachedUsername(String lastCachedUsername) {
         this.lastCachedUsername = lastCachedUsername;
+    }
+
+    public InetSocketAddress getLastCachedIP() {
+        return lastCachedIP;
+    }
+
+    public String getLastCachedIPString() {
+        return lastCachedIP == null ? "" : lastCachedIP.toString();
+    }
+
+    public void setLastCachedIP(InetSocketAddress lastCachedIP) {
+        this.lastCachedIP = lastCachedIP;
     }
 
     public WeakEssentialsMap<String, Home> getHomes() {
@@ -115,6 +150,14 @@ public class EssentialsUser implements IWeakValue, ISaveable {
 
     public void setRequestingTeleport(boolean requestingTeleport) {
         this.requestingTeleport = requestingTeleport;
+    }
+
+    public boolean isTeleportingDisabled() {
+        return teleportingDisabled;
+    }
+
+    public void setTeleportingDisabled(boolean teleportingDisabled) {
+        this.teleportingDisabled = teleportingDisabled;
     }
 
     public Map<EssentialsUser, Boolean> getTpRequests() {
@@ -154,6 +197,9 @@ public class EssentialsUser implements IWeakValue, ISaveable {
         getPlayer(); // For retrieving the cached username
         if (lastCachedUsername != null) {
             user.getNode("username").setValue(lastCachedUsername);
+        }
+        if (lastCachedIP != null) {
+            user.getNode("IP").setValue(lastCachedIP.toString());
         }
 
         // Save homes

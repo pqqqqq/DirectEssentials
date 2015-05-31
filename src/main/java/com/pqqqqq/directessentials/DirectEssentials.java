@@ -1,7 +1,7 @@
 package com.pqqqqq.directessentials;
 
 import com.google.inject.Inject;
-import com.pqqqqq.directessentials.commands.RegistrarCMD;
+import com.pqqqqq.directessentials.commands.CMDRegistrar;
 import com.pqqqqq.directessentials.config.Config;
 import com.pqqqqq.directessentials.config.DataConfig;
 import com.pqqqqq.directessentials.events.CoreEvents;
@@ -66,7 +66,7 @@ public class DirectEssentials {
         eventManager.register(this, new ProtectionEvents(this));
 
         // Register commands
-        new RegistrarCMD(this).register();
+        new CMDRegistrar(this).register();
         
         // Instantiate managers
         essentialsGame = new EssentialsGame(game);

@@ -3,7 +3,7 @@ package com.pqqqqq.directessentials.commands;
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
 import org.spongepowered.api.CatalogTypes;
-import org.spongepowered.api.data.manipulators.items.EnchantmentData;
+import org.spongepowered.api.data.manipulator.item.EnchantmentData;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.Enchantment;
 import org.spongepowered.api.item.inventory.ItemStack;

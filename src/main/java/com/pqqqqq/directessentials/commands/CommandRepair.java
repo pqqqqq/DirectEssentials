@@ -2,7 +2,7 @@ package com.pqqqqq.directessentials.commands;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
-import org.spongepowered.api.data.manipulators.items.DurabilityData;
+import org.spongepowered.api.data.manipulator.item.DurabilityData;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Texts;

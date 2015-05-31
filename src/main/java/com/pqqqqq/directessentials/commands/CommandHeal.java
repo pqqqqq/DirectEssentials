@@ -2,7 +2,7 @@ package com.pqqqqq.directessentials.commands;
 
 import com.google.common.base.Optional;
 import com.pqqqqq.directessentials.DirectEssentials;
-import org.spongepowered.api.data.manipulators.entities.HealthData;
+import org.spongepowered.api.data.manipulator.entity.HealthData;
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.format.TextColors;
@@ -35,8 +35,7 @@ public class CommandHeal implements CommandExecutor {
 
         if (healthData.isPresent()) {
             HealthData hd = healthData.get();
-            hd.setHealth(hd.getMaxHealth());
-            player.offer(hd);
+            player.offer(hd.setHealth(hd.getMaxHealth()));
 
             src.sendMessage(Texts.of(TextColors.GREEN, "Health refilled."));
         }

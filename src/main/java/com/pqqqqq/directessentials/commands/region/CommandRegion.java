@@ -22,11 +22,12 @@ public class CommandRegion implements CommandExecutor {
 
     public static CommandSpec build(DirectEssentials plugin) {
         return CommandSpec.builder().executor(new CommandRegion(plugin)).description(Texts.of(TextColors.AQUA, "Region utility commands"))
-                .child(CommandCreate.build(plugin), "create", "c").build();
+                .child(CommandCreate.build(plugin), "create", "c").child(CommandAdd.build(plugin), "add", "addmember", "am").child(CommandRemove.build(plugin), "remove", "removemember", "rm")
+                .child(CommandSetOwner.build(plugin), "setowner", "so").build();
     }
 
     public CommandResult execute(CommandSource commandSource, CommandContext commandContext) throws CommandException {
-        commandSource.sendMessage(Texts.of(TextColors.RED, "/region <create>"));
+        commandSource.sendMessage(Texts.of(TextColors.RED, "/region <create|add|remove|setowner>"));
         return CommandResult.success();
     }
 }

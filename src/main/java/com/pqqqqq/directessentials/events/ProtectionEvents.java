@@ -109,13 +109,11 @@ public class ProtectionEvents {
 
         for (Region region : plugin.getEssentialsGame().getRegions().values()) {
             if (region.getCuboid().contains(block)) {
-                if (player.hasPermission("directessentials.region.override." + region.getName())) {
-                    return true;
+                if (!region.canBuild(player)) {
+                    player.sendMessage(Texts.of(TextColors.RED, "You can't build here."));
+                    event.setCancelled(true);
+                    return false;
                 }
-
-                player.sendMessage(Texts.of(TextColors.RED, "You can't build here."));
-                event.setCancelled(true);
-                return false;
             }
         }
 

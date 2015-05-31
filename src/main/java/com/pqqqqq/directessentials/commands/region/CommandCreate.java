@@ -51,7 +51,7 @@ public class CommandCreate implements CommandExecutor {
             return CommandResult.success();
         }
 
-        Region newRegion = new Region(regionName, selection);
+        Region newRegion = new Region(regionName, player.getUniqueId().toString(), selection);
         plugin.getEssentialsGame().getRegions().put(regionName, newRegion);
         src.sendMessage(Texts.of(TextColors.GREEN, "Region created successfully."));
         return CommandResult.success();
